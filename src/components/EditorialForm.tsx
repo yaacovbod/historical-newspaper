@@ -17,11 +17,29 @@ export default function EditorialForm({ onSubmit, loading }: Props) {
   const [teamSize, setTeamSize] = useState(1)
   const [authorGender, setAuthorGender] = useState<EditorialFormData['authorGender']>('male')
   const [mainArticleText, setMainArticleText] = useState('')
-  const [secondaryArticleText, setSecondaryArticleText] = useState('')
+  const [secondaryArticleTexts, setSecondaryArticleTexts] = useState<string[]>([''])
+
+  function handleTeamSizeChange(val: number) {
+    const size = Math.max(1, val)
+    setTeamSize(size)
+    setSecondaryArticleTexts(prev => {
+      const next = [...prev]
+      while (next.length < size) next.push('')
+      return next.slice(0, size)
+    })
+  }
+
+  function updateSecondary(index: number, value: string) {
+    setSecondaryArticleTexts(prev => {
+      const next = [...prev]
+      next[index] = value
+      return next
+    })
+  }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    onSubmit({ articleType: 'editorial', cluster, teamSize, authorGender, mainArticleText, secondaryArticleText })
+    onSubmit({ articleType: 'editorial', cluster, teamSize, authorGender, mainArticleText, secondaryArticleTexts })
   }
 
   return (
@@ -45,11 +63,12 @@ export default function EditorialForm({ onSubmit, loading }: Props) {
           type="number"
           min={1}
           value={teamSize}
-          onChange={e => setTeamSize(Number(e.target.value))}
+          onChange={e => handleTeamSizeChange(Number(e.target.value))}
           required
           className="w-24 px-3 py-2 rounded-xl text-sm"
           style={inputStyle}
         />
+        <p className="text-xs mt-1" style={{ color: '#6060a0' }}>מספר כתבות המשנה יתאים לגודל הצוות</p>
       </div>
 
       <div>
@@ -83,17 +102,24 @@ export default function EditorialForm({ onSubmit, loading }: Props) {
         />
       </div>
 
-      <div>
-        <label className={labelClass} style={labelStyle}>הדבק את כתבת המשנה שנוצרה</label>
-        <textarea
-          value={secondaryArticleText}
-          onChange={e => setSecondaryArticleText(e.target.value)}
-          rows={8}
-          required
-          className="w-full px-3 py-2 rounded-xl resize-y font-mono text-sm"
-          style={inputStyle}
-          placeholder="הדבק כאן את כתבת המשנה שנוצרה בשלב הקודם..."
-        />
+      <div className="space-y-4">
+        <label className={labelClass} style={labelStyle}>
+          כתבות משנה ({secondaryArticleTexts.length})
+        </label>
+        {secondaryArticleTexts.map((text, i) => (
+          <div key={i}>
+            <p className="text-xs mb-1" style={{ color: '#6060a0' }}>כתבת משנה {i + 1}</p>
+            <textarea
+              value={text}
+              onChange={e => updateSecondary(i, e.target.value)}
+              rows={8}
+              required
+              className="w-full px-3 py-2 rounded-xl resize-y font-mono text-sm"
+              style={inputStyle}
+              placeholder={`הדבק כאן את כתבת המשנה ${i + 1}...`}
+            />
+          </div>
+        ))}
       </div>
 
       <button

@@ -22,7 +22,7 @@ export interface EditorialFormData {
   teamSize: number
   authorGender: 'male' | 'female' | 'plural'
   mainArticleText: string
-  secondaryArticleText: string
+  secondaryArticleTexts: string[]
   cluster: string
 }
 

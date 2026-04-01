@@ -127,14 +127,17 @@ export function buildEditorialPrompt(data: EditorialFormData): { system: string;
 
 הערה: כל נתוני שלב 1 כבר סופקו. דלג ישירות לשלב 2.`
 
+  const secondarySection = data.secondaryArticleTexts
+    .map((text, i) => `===כתבת משנה ${i + 1}===\n${text}`)
+    .join('\n\n')
+
   const USER = `אשכול: ${data.cluster}
 גודל צוות: ${data.teamSize} | מין הכותב: ${data.authorGender}
 
 ===כתבה ראשית===
 ${data.mainArticleText}
 
-===כתבת משנה===
-${data.secondaryArticleText}
+${secondarySection}
 `
 
   return { system: SYSTEM, user: USER }
