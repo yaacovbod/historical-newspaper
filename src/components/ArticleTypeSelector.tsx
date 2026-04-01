@@ -26,19 +26,26 @@ const OPTIONS: { type: ArticleType; title: string; description: string }[] = [
   },
 ]
 
+const GRADIENTS = [
+  'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+  'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+  'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+]
+
 export default function ArticleTypeSelector({ onSelect }: Props) {
   return (
-    <div className="space-y-4">
-      <h2 className="text-lg font-semibold">בחר סוג כתבה</h2>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        {OPTIONS.map(opt => (
+    <div className="space-y-6">
+      <h2 className="text-xl font-bold" style={{ color: '#e0c3fc' }}>בחר סוג כתבה</h2>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        {OPTIONS.map((opt, i) => (
           <button
             key={opt.type}
             onClick={() => onSelect(opt.type)}
-            className="border border-gray-300 rounded p-4 text-right hover:border-blue-500 hover:bg-blue-50 transition-colors"
+            className="rounded-xl p-5 text-right transition-transform hover:scale-105 hover:brightness-110 active:scale-95"
+            style={{ background: GRADIENTS[i], border: 'none' }}
           >
-            <div className="font-medium mb-1">{opt.title}</div>
-            <div className="text-sm text-gray-600">{opt.description}</div>
+            <div className="font-bold text-white text-base mb-2">{opt.title}</div>
+            <div className="text-sm" style={{ color: 'rgba(255,255,255,0.85)' }}>{opt.description}</div>
           </button>
         ))}
       </div>
