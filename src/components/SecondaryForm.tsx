@@ -25,6 +25,7 @@ export default function SecondaryForm({ onSubmit, loading, concepts, clusterTitl
   const [authorGender, setAuthorGender] = useState<SecondaryFormData['authorGender']>('male')
   const [selectedConcepts, setSelectedConcepts] = useState<string[]>([])
   const [sources, setSources] = useState<string[]>([''])
+  const [notes, setNotes] = useState('')
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -38,6 +39,7 @@ export default function SecondaryForm({ onSubmit, loading, concepts, clusterTitl
       authorGender,
       selectedConcepts,
       sources: sources.filter(Boolean).join('\n\n---\n\n'),
+      notes: notes || undefined,
     })
   }
 
@@ -122,6 +124,18 @@ export default function SecondaryForm({ onSubmit, loading, concepts, clusterTitl
       <div>
         <label className={labelClass} style={labelStyle}>מקורות</label>
         <SourcesList sources={sources} onChange={setSources} />
+      </div>
+
+      <div>
+        <label className={labelClass} style={labelStyle}>הערות נוספות <span style={{ fontWeight: 400, color: '#8a6a50' }}>(אופציונלי)</span></label>
+        <textarea
+          value={notes}
+          onChange={e => setNotes(e.target.value)}
+          rows={3}
+          className="w-full px-3 py-2 rounded-xl text-sm resize-y"
+          style={inputStyle}
+          placeholder="הוראות מיוחדות, הדגשות, בקשות ספציפיות..."
+        />
       </div>
 
       <button

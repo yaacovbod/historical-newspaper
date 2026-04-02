@@ -18,6 +18,7 @@ export default function EditorialForm({ onSubmit, loading, clusterTitle }: Props
   const [authorGender, setAuthorGender] = useState<EditorialFormData['authorGender']>('male')
   const [mainArticleText, setMainArticleText] = useState('')
   const [secondaryArticleTexts, setSecondaryArticleTexts] = useState<string[]>([''])
+  const [notes, setNotes] = useState('')
 
   function handleTeamSizeChange(val: number) {
     const size = Math.max(1, val)
@@ -39,7 +40,7 @@ export default function EditorialForm({ onSubmit, loading, clusterTitle }: Props
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    onSubmit({ articleType: 'editorial', cluster: clusterTitle, teamSize, authorGender, mainArticleText, secondaryArticleTexts })
+    onSubmit({ articleType: 'editorial', cluster: clusterTitle, teamSize, authorGender, mainArticleText, secondaryArticleTexts, notes: notes || undefined })
   }
 
   return (
@@ -107,6 +108,18 @@ export default function EditorialForm({ onSubmit, loading, clusterTitle }: Props
             />
           </div>
         ))}
+      </div>
+
+      <div>
+        <label className={labelClass} style={labelStyle}>הערות נוספות <span style={{ fontWeight: 400, color: '#8a6a50' }}>(אופציונלי)</span></label>
+        <textarea
+          value={notes}
+          onChange={e => setNotes(e.target.value)}
+          rows={3}
+          className="w-full px-3 py-2 rounded-xl text-sm resize-y"
+          style={inputStyle}
+          placeholder="הוראות מיוחדות, הדגשות, בקשות ספציפיות..."
+        />
       </div>
 
       <button

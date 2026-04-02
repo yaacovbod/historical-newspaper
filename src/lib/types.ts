@@ -6,6 +6,7 @@ export interface BaseFormData {
   selectedConcepts: string[]
   sources: string
   curriculumCluster?: string
+  notes?: string
 }
 
 export interface NewsFormData extends BaseFormData {
@@ -26,6 +27,7 @@ export interface EditorialFormData {
   secondaryArticleTexts: string[]
   cluster: string
   curriculumCluster?: string
+  notes?: string
 }
 
 export type FormData = NewsFormData | SecondaryFormData | EditorialFormData

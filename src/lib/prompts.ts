@@ -48,7 +48,7 @@ export function buildNewsPrompt(data: NewsFormData): { system: string; user: str
 גודל צוות: ${data.teamSize} | מין הכותב: ${data.authorGender}
 מושגים לשילוב: ${data.selectedConcepts.join(', ')}
 מקורות:
-${data.sources}
+${data.sources}${data.notes ? `\n\nהערות מיוחדות מהתלמיד:\n${data.notes}` : ''}
 `
 
   return { system: SYSTEM, user: USER }
@@ -124,7 +124,7 @@ export function buildSecondaryPrompt(data: SecondaryFormData): { system: string;
 גודל צוות: ${data.teamSize} | מין הכותב: ${data.authorGender}
 מושגים לשילוב: ${data.selectedConcepts.join(', ')}
 מקורות:
-${data.sources}
+${data.sources}${data.notes ? `\n\nהערות מיוחדות מהתלמיד:\n${data.notes}` : ''}
 `
 
   return { system: SYSTEM, user: USER }
@@ -176,7 +176,7 @@ export function buildEditorialPrompt(data: EditorialFormData): { system: string;
     .join('\n\n')
 
   const USER = `${data.curriculumCluster ? `נושא לימודי: ${data.curriculumCluster}\n` : ''}אשכול: ${data.cluster}
-גודל צוות: ${data.teamSize} | מין הכותב: ${data.authorGender}
+גודל צוות: ${data.teamSize} | מין הכותב: ${data.authorGender}${data.notes ? `\n\nהערות מיוחדות מהתלמיד:\n${data.notes}` : ''}
 
 ===כתבה ראשית===
 ${data.mainArticleText}
