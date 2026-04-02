@@ -40,46 +40,51 @@ export default function ConceptsSelector({ selected, onChange, concepts: concept
 
   return (
     <div className="space-y-3">
-      <div className="grid grid-cols-4 gap-2">
-        {allConcepts.map(concept => (
-          <label key={concept} className="flex items-center gap-1 cursor-pointer text-sm" style={labelStyle}>
-            <input
-              type="checkbox"
-              checked={selected.includes(concept)}
-              onChange={() => toggle(concept)}
-            />
-            {concept}
-          </label>
-        ))}
-      </div>
-
-      {customConcepts.length > 0 && (
-        <div className="flex flex-wrap gap-2 pt-1">
-          {customConcepts.map(concept => (
-            <span
+      <div className="flex flex-wrap gap-2">
+        {allConcepts.map(concept => {
+          const isSelected = selected.includes(concept)
+          return (
+            <button
               key={concept}
-              className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs"
-              style={{ background: '#f5f0e8', border: '1px solid #c9b99a', color: '#5c3d1e' }}
+              type="button"
+              onClick={() => toggle(concept)}
+              className="px-3 py-1 rounded-full text-sm transition-all"
+              style={isSelected
+                ? { background: '#8b4513', color: '#fff', border: '1px solid #8b4513' }
+                : { background: '#faf7f2', color: '#2c1810', border: '1px solid #c9b99a' }
+              }
             >
-              <input
-                type="checkbox"
-                checked={selected.includes(concept)}
-                onChange={() => toggle(concept)}
-                className="cursor-pointer"
-              />
               {concept}
+            </button>
+          )
+        })}
+        {customConcepts.map(concept => {
+          const isSelected = selected.includes(concept)
+          return (
+            <span key={concept} className="flex items-center rounded-full text-sm overflow-hidden" style={{ border: `1px solid ${isSelected ? '#8b4513' : '#c9b99a'}` }}>
+              <button
+                type="button"
+                onClick={() => toggle(concept)}
+                className="px-3 py-1 transition-all"
+                style={isSelected
+                  ? { background: '#8b4513', color: '#fff' }
+                  : { background: '#faf7f2', color: '#2c1810' }
+                }
+              >
+                {concept}
+              </button>
               <button
                 type="button"
                 onClick={() => removeCustom(concept)}
-                className="mr-1 hover:opacity-60"
-                style={{ color: '#8a6a50' }}
+                className="px-2 py-1 hover:opacity-60 transition-opacity"
+                style={{ background: isSelected ? '#7a3a10' : '#f0ebe3', color: isSelected ? '#fff' : '#8a6a50' }}
               >
                 ✕
               </button>
             </span>
-          ))}
-        </div>
-      )}
+          )
+        })}
+      </div>
 
       <div className="flex gap-2 mt-2">
         <input
