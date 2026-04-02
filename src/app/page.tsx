@@ -78,7 +78,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen" style={{ background: '#f5f0e8' }}>
+    <div className="min-h-screen">
       <main className="max-w-3xl mx-auto px-4 py-12">
 
         {/* Header */}
