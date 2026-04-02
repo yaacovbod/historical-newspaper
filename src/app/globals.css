@@ -13,7 +13,11 @@
 }
 
 body {
-  background: var(--bg);
+  background-color: var(--bg);
+  background-image: url('/background.png');
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
   color: var(--text);
   font-family: 'Heebo', sans-serif;
 }
