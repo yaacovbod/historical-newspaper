@@ -6,14 +6,14 @@ import type { EditorialFormData } from '@/lib/types'
 interface Props {
   onSubmit: (data: EditorialFormData) => void
   loading: boolean
+  clusterTitle: string
 }
 
 const inputStyle = { background: '#0f0f23', border: '1px solid #2a2a4a', color: '#e8e8f0' }
 const labelClass = 'block text-sm font-medium mb-1'
 const labelStyle = { color: '#c0c0d8' }
 
-export default function EditorialForm({ onSubmit, loading }: Props) {
-  const [cluster, setCluster] = useState('')
+export default function EditorialForm({ onSubmit, loading, clusterTitle }: Props) {
   const [teamSize, setTeamSize] = useState(1)
   const [authorGender, setAuthorGender] = useState<EditorialFormData['authorGender']>('male')
   const [mainArticleText, setMainArticleText] = useState('')
@@ -39,24 +39,11 @@ export default function EditorialForm({ onSubmit, loading }: Props) {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    onSubmit({ articleType: 'editorial', cluster, teamSize, authorGender, mainArticleText, secondaryArticleTexts })
+    onSubmit({ articleType: 'editorial', cluster: clusterTitle, teamSize, authorGender, mainArticleText, secondaryArticleTexts })
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div>
-        <label className={labelClass} style={labelStyle}>אשכול</label>
-        <input
-          type="text"
-          value={cluster}
-          onChange={e => setCluster(e.target.value)}
-          required
-          className="w-full px-3 py-2 rounded-xl text-sm"
-          style={inputStyle}
-          placeholder="לדוגמה: תקופת המנדט הבריטי"
-        />
-      </div>
-
       <div>
         <label className={labelClass} style={labelStyle}>גודל הצוות</label>
         <input

@@ -129,13 +129,13 @@ export default function Home() {
                 </div>
               )}
               {articleType === 'news' && (
-                <NewsForm onSubmit={handleSubmit} loading={false} concepts={cluster.concepts} />
+                <NewsForm onSubmit={handleSubmit} loading={false} concepts={cluster.concepts} clusterTitle={cluster.title} />
               )}
               {articleType === 'secondary' && (
-                <SecondaryForm onSubmit={handleSubmit} loading={false} concepts={cluster.concepts} />
+                <SecondaryForm onSubmit={handleSubmit} loading={false} concepts={cluster.concepts} clusterTitle={cluster.title} />
               )}
               {articleType === 'editorial' && (
-                <EditorialForm onSubmit={handleSubmit} loading={false} />
+                <EditorialForm onSubmit={handleSubmit} loading={false} clusterTitle={cluster.title} />
               )}
             </div>
           )}

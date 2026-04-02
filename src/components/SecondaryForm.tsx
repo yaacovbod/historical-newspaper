@@ -9,6 +9,7 @@ interface Props {
   onSubmit: (data: SecondaryFormData) => void
   loading: boolean
   concepts?: string[]
+  clusterTitle: string
 }
 
 const inputClass = 'w-full px-3 py-2 rounded-xl text-sm'
@@ -16,8 +17,7 @@ const inputStyle = { background: '#0f0f23', border: '1px solid #2a2a4a', color: 
 const labelClass = 'block text-sm font-medium mb-1'
 const labelStyle = { color: '#c0c0d8' }
 
-export default function SecondaryForm({ onSubmit, loading, concepts }: Props) {
-  const [cluster, setCluster] = useState('')
+export default function SecondaryForm({ onSubmit, loading, concepts, clusterTitle }: Props) {
   const [topic, setTopic] = useState('')
   const [subTopic, setSubTopic] = useState('')
   const [subGenre, setSubGenre] = useState<SecondaryFormData['subGenre']>('interview')
@@ -30,7 +30,7 @@ export default function SecondaryForm({ onSubmit, loading, concepts }: Props) {
     e.preventDefault()
     onSubmit({
       articleType: 'secondary',
-      cluster,
+      cluster: clusterTitle,
       topic,
       subTopic,
       subGenre,
@@ -43,19 +43,6 @@ export default function SecondaryForm({ onSubmit, loading, concepts }: Props) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div>
-        <label className={labelClass} style={labelStyle}>אשכול</label>
-        <input
-          type="text"
-          value={cluster}
-          onChange={e => setCluster(e.target.value)}
-          required
-          className={inputClass}
-          style={inputStyle}
-          placeholder="לדוגמה: תקופת המנדט הבריטי"
-        />
-      </div>
-
       <div>
         <label className={labelClass} style={labelStyle}>נושא / סוגיה (הכתבה הראשית)</label>
         <input
