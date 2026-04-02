@@ -18,6 +18,7 @@ export default function Home() {
   const [articleType, setArticleType] = useState<ArticleType | null>(null)
   const [result, setResult] = useState('')
   const [error, setError] = useState('')
+  const [refining, setRefining] = useState(false)
 
   function handleSelectCluster(c: Cluster) {
     setCluster(c)
@@ -50,6 +51,21 @@ export default function Home() {
     } catch {
       setError('שגיאת רשת — בדוק את החיבור ונסה שוב')
       setStage('form')
+    }
+  }
+
+  async function handleRefine(note: string) {
+    setRefining(true)
+    try {
+      const res = await fetch('/api/refine', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ originalText: result, refinement: note }),
+      })
+      const json = await res.json()
+      if (res.ok) setResult(json.result)
+    } finally {
+      setRefining(false)
     }
   }
 
@@ -155,7 +171,7 @@ export default function Home() {
           )}
 
           {stage === 'result' && (
-            <OutputDisplay text={result} onReset={handleReset} />
+            <OutputDisplay text={result} onReset={handleReset} onRefine={handleRefine} refining={refining} />
           )}
         </div>
       </main>

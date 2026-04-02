@@ -6,15 +6,24 @@ import ReactMarkdown from 'react-markdown'
 interface Props {
   text: string
   onReset: () => void
+  onRefine: (note: string) => Promise<void>
+  refining: boolean
 }
 
-export default function OutputDisplay({ text, onReset }: Props) {
+export default function OutputDisplay({ text, onReset, onRefine, refining }: Props) {
   const [copied, setCopied] = useState(false)
+  const [refinementNote, setRefinementNote] = useState('')
 
   async function handleCopy() {
     await navigator.clipboard.writeText(text)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+  }
+
+  async function handleRefine() {
+    if (!refinementNote.trim()) return
+    await onRefine(refinementNote)
+    setRefinementNote('')
   }
 
   return (
@@ -30,7 +39,7 @@ export default function OutputDisplay({ text, onReset }: Props) {
         <button
           onClick={onReset}
           className="px-4 py-2 rounded font-medium transition-opacity hover:opacity-80"
-          style={{ background: '#2a2a4a', color: '#c0c0d8', border: '1px solid #3a3a6a' }}
+          style={{ background: '#f5f0e8', color: '#2c1810', border: '1px solid #c9b99a' }}
         >
           התחל מחדש
         </button>
@@ -73,6 +82,32 @@ export default function OutputDisplay({ text, onReset }: Props) {
         >
           {text}
         </ReactMarkdown>
+      </div>
+
+      {/* אזור שיפור */}
+      <div className="rounded-xl p-5" style={{ background: '#fffdf7', border: '1px solid #c9b99a' }}>
+        <p className="text-sm font-medium mb-2" style={{ color: '#5c3d1e' }}>
+          רוצה לשפר את הכתבה?
+        </p>
+        <div className="flex gap-2">
+          <textarea
+            value={refinementNote}
+            onChange={e => setRefinementNote(e.target.value)}
+            rows={2}
+            disabled={refining}
+            className="flex-1 px-3 py-2 rounded-xl text-sm resize-none"
+            style={{ background: '#faf7f2', border: '1px solid #c9b99a', color: '#2c1810' }}
+            placeholder='למשל: "קצר את הכתבה", "הוסף ציטוט מהמקור הראשון", "שנה את הטון לרשמי יותר"...'
+          />
+          <button
+            onClick={handleRefine}
+            disabled={refining || !refinementNote.trim()}
+            className="px-4 py-2 rounded-xl text-sm font-medium transition-opacity hover:opacity-80 disabled:opacity-40 self-end"
+            style={{ background: '#8b4513', color: '#fff' }}
+          >
+            {refining ? 'משפר...' : 'שפר'}
+          </button>
+        </div>
       </div>
     </div>
   )
