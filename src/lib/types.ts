@@ -5,6 +5,7 @@ export interface BaseFormData {
   authorGender: 'male' | 'female' | 'plural'
   selectedConcepts: string[]
   sources: string
+  curriculumCluster?: string
 }
 
 export interface NewsFormData extends BaseFormData {
@@ -24,6 +25,7 @@ export interface EditorialFormData {
   mainArticleText: string
   secondaryArticleTexts: string[]
   cluster: string
+  curriculumCluster?: string
 }
 
 export type FormData = NewsFormData | SecondaryFormData | EditorialFormData

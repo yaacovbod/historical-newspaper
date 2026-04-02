@@ -37,7 +37,7 @@ export function buildNewsPrompt(data: NewsFormData): { system: string; user: str
 
 הערה: כל נתוני שלב 1 כבר סופקו. דלג ישירות לשלב 2 — כתיבת הכתבה.`
 
-  const USER = `אשכול: ${data.cluster}
+  const USER = `${data.curriculumCluster ? `נושא לימודי: ${data.curriculumCluster}\n` : ''}אשכול: ${data.cluster}
 נושא: ${data.topic}
 גודל צוות: ${data.teamSize} | מין הכותב: ${data.authorGender}
 מושגים לשילוב: ${data.selectedConcepts.join(', ')}
@@ -90,7 +90,7 @@ ${subGenreInstructions[data.subGenre]}
 
 הערה: כל נתוני שלב 1 כבר סופקו. דלג ישירות לשלב 2.`
 
-  const USER = `אשכול: ${data.cluster}
+  const USER = `${data.curriculumCluster ? `נושא לימודי: ${data.curriculumCluster}\n` : ''}אשכול: ${data.cluster}
 נושא כתבת המשנה: ${data.subTopic}
 סוגה: ${data.subGenre}
 גודל צוות: ${data.teamSize} | מין הכותב: ${data.authorGender}
@@ -131,7 +131,7 @@ export function buildEditorialPrompt(data: EditorialFormData): { system: string;
     .map((text, i) => `===כתבת משנה ${i + 1}===\n${text}`)
     .join('\n\n')
 
-  const USER = `אשכול: ${data.cluster}
+  const USER = `${data.curriculumCluster ? `נושא לימודי: ${data.curriculumCluster}\n` : ''}אשכול: ${data.cluster}
 גודל צוות: ${data.teamSize} | מין הכותב: ${data.authorGender}
 
 ===כתבה ראשית===

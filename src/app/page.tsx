@@ -33,10 +33,11 @@ export default function Home() {
     setError('')
     setStage('loading')
     try {
+      const enrichedData = { ...data, curriculumCluster: cluster?.title }
       const res = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify(enrichedData),
       })
       const json = await res.json()
       if (!res.ok) {
