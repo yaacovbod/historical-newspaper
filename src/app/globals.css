@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;700;800&display=swap');
 
 :root {
   --bg: #f5f0e8;
@@ -19,11 +18,11 @@ body {
   background-attachment: fixed;
   background-repeat: no-repeat;
   color: var(--text);
-  font-family: 'Heebo', sans-serif;
+  font-family: inherit;
 }
 
 h1, h2, h3, h4 {
-  font-family: 'Heebo', sans-serif;
+  font-family: inherit;
   font-weight: 700;
 }
 
