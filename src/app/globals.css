@@ -19,6 +19,7 @@ body {
   background-repeat: no-repeat;
   color: var(--text);
   font-family: inherit;
+  letter-spacing: 0.03em;
 }
 
 h1, h2, h3, h4 {
