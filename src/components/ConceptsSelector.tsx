@@ -6,12 +6,14 @@ import { HISTORICAL_CONCEPTS } from '@/lib/concepts'
 interface Props {
   selected: string[]
   onChange: (concepts: string[]) => void
+  concepts?: string[]
 }
 
 const inputStyle = { background: '#0f0f23', border: '1px solid #2a2a4a', color: '#e8e8f0' }
 const labelStyle = { color: '#c0c0d8' }
 
-export default function ConceptsSelector({ selected, onChange }: Props) {
+export default function ConceptsSelector({ selected, onChange, concepts: conceptsProp }: Props) {
+  const allConcepts = conceptsProp ?? HISTORICAL_CONCEPTS
   const [customInput, setCustomInput] = useState('')
   const [customConcepts, setCustomConcepts] = useState<string[]>([])
 
@@ -25,7 +27,7 @@ export default function ConceptsSelector({ selected, onChange }: Props) {
 
   function addCustom() {
     const trimmed = customInput.trim()
-    if (!trimmed || customConcepts.includes(trimmed) || HISTORICAL_CONCEPTS.includes(trimmed)) return
+    if (!trimmed || customConcepts.includes(trimmed) || allConcepts.includes(trimmed)) return
     setCustomConcepts(prev => [...prev, trimmed])
     onChange([...selected, trimmed])
     setCustomInput('')
@@ -39,7 +41,7 @@ export default function ConceptsSelector({ selected, onChange }: Props) {
   return (
     <div className="space-y-3">
       <div className="grid grid-cols-4 gap-2">
-        {HISTORICAL_CONCEPTS.map(concept => (
+        {allConcepts.map(concept => (
           <label key={concept} className="flex items-center gap-1 cursor-pointer text-sm" style={labelStyle}>
             <input
               type="checkbox"

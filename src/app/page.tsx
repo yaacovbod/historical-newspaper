@@ -6,16 +6,23 @@ import NewsForm from '@/components/NewsForm'
 import SecondaryForm from '@/components/SecondaryForm'
 import EditorialForm from '@/components/EditorialForm'
 import OutputDisplay from '@/components/OutputDisplay'
+import { CLUSTERS, type Cluster } from '@/lib/clusters'
 import type { FormData } from '@/lib/types'
 
-type Stage = 'select' | 'form' | 'loading' | 'result'
+type Stage = 'cluster' | 'select' | 'form' | 'loading' | 'result'
 type ArticleType = FormData['articleType']
 
 export default function Home() {
-  const [stage, setStage] = useState<Stage>('select')
+  const [stage, setStage] = useState<Stage>('cluster')
+  const [cluster, setCluster] = useState<Cluster | null>(null)
   const [articleType, setArticleType] = useState<ArticleType | null>(null)
   const [result, setResult] = useState('')
   const [error, setError] = useState('')
+
+  function handleSelectCluster(c: Cluster) {
+    setCluster(c)
+    setStage('select')
+  }
 
   function handleSelectType(type: ArticleType) {
     setArticleType(type)
@@ -46,7 +53,8 @@ export default function Home() {
   }
 
   function handleReset() {
-    setStage('select')
+    setStage('cluster')
+    setCluster(null)
     setArticleType(null)
     setResult('')
     setError('')
@@ -68,11 +76,44 @@ export default function Home() {
 
         {/* Content card */}
         <div className="rounded-2xl p-8" style={{ background: '#16213e', border: '1px solid #2a2a4a' }}>
-          {stage === 'select' && (
-            <ArticleTypeSelector onSelect={handleSelectType} />
+
+          {/* בחירת אשכול */}
+          {stage === 'cluster' && (
+            <div className="space-y-6">
+              <h2 className="text-xl font-bold" style={{ color: '#e0c3fc' }}>בחר אשכול</h2>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                {CLUSTERS.map(c => (
+                  <button
+                    key={c.id}
+                    onClick={() => handleSelectCluster(c)}
+                    className="rounded-xl p-6 text-right transition-transform hover:scale-105 hover:brightness-110 active:scale-95"
+                    style={{ background: c.gradient, border: 'none' }}
+                  >
+                    <div className="font-bold text-white text-lg mb-2">{c.title}</div>
+                    <div className="text-sm" style={{ color: 'rgba(255,255,255,0.85)' }}>{c.subtitle}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
           )}
 
-          {stage === 'form' && articleType && (
+          {stage === 'select' && cluster && (
+            <div>
+              <button
+                onClick={() => setStage('cluster')}
+                className="text-sm mb-4 block hover:underline"
+                style={{ color: '#8ec5fc' }}
+              >
+                ← חזור לבחירת אשכול
+              </button>
+              <div className="mb-6 px-3 py-2 rounded-lg text-sm" style={{ background: '#1e1e3a', border: '1px solid #3a3a6a', color: '#c0c0d8' }}>
+                אשכול: <span className="font-semibold" style={{ color: '#e0c3fc' }}>{cluster.title}</span>
+              </div>
+              <ArticleTypeSelector onSelect={handleSelectType} />
+            </div>
+          )}
+
+          {stage === 'form' && articleType && cluster && (
             <div>
               <button
                 onClick={() => setStage('select')}
@@ -87,10 +128,10 @@ export default function Home() {
                 </div>
               )}
               {articleType === 'news' && (
-                <NewsForm onSubmit={handleSubmit} loading={false} />
+                <NewsForm onSubmit={handleSubmit} loading={false} concepts={cluster.concepts} />
               )}
               {articleType === 'secondary' && (
-                <SecondaryForm onSubmit={handleSubmit} loading={false} />
+                <SecondaryForm onSubmit={handleSubmit} loading={false} concepts={cluster.concepts} />
               )}
               {articleType === 'editorial' && (
                 <EditorialForm onSubmit={handleSubmit} loading={false} />

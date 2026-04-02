@@ -8,6 +8,7 @@ import ConceptsSelector from './ConceptsSelector'
 interface Props {
   onSubmit: (data: SecondaryFormData) => void
   loading: boolean
+  concepts?: string[]
 }
 
 const inputClass = 'w-full px-3 py-2 rounded-xl text-sm'
@@ -15,7 +16,7 @@ const inputStyle = { background: '#0f0f23', border: '1px solid #2a2a4a', color: 
 const labelClass = 'block text-sm font-medium mb-1'
 const labelStyle = { color: '#c0c0d8' }
 
-export default function SecondaryForm({ onSubmit, loading }: Props) {
+export default function SecondaryForm({ onSubmit, loading, concepts }: Props) {
   const [cluster, setCluster] = useState('')
   const [topic, setTopic] = useState('')
   const [subTopic, setSubTopic] = useState('')
@@ -128,7 +129,7 @@ export default function SecondaryForm({ onSubmit, loading }: Props) {
 
       <div>
         <label className={labelClass} style={labelStyle}>מושגים לשילוב</label>
-        <ConceptsSelector selected={selectedConcepts} onChange={setSelectedConcepts} />
+        <ConceptsSelector selected={selectedConcepts} onChange={setSelectedConcepts} concepts={concepts} />
       </div>
 
       <div>
