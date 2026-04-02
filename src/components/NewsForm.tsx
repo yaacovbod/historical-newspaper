@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { HISTORICAL_CONCEPTS } from '@/lib/concepts'
 import type { NewsFormData } from '@/lib/types'
 import SourcesList from './SourcesList'
+import ConceptsSelector from './ConceptsSelector'
 
 interface Props {
   onSubmit: (data: NewsFormData) => void
@@ -22,12 +22,6 @@ export default function NewsForm({ onSubmit, loading }: Props) {
   const [authorGender, setAuthorGender] = useState<NewsFormData['authorGender']>('male')
   const [selectedConcepts, setSelectedConcepts] = useState<string[]>([])
   const [sources, setSources] = useState<string[]>([''])
-
-  function toggleConcept(concept: string) {
-    setSelectedConcepts(prev =>
-      prev.includes(concept) ? prev.filter(c => c !== concept) : [...prev, concept]
-    )
-  }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -103,18 +97,7 @@ export default function NewsForm({ onSubmit, loading }: Props) {
 
       <div>
         <label className={labelClass} style={labelStyle}>מושגים לשילוב</label>
-        <div className="grid grid-cols-4 gap-2">
-          {HISTORICAL_CONCEPTS.map(concept => (
-            <label key={concept} className="flex items-center gap-1 cursor-pointer text-sm" style={{ color: '#c0c0d8' }}>
-              <input
-                type="checkbox"
-                checked={selectedConcepts.includes(concept)}
-                onChange={() => toggleConcept(concept)}
-              />
-              {concept}
-            </label>
-          ))}
-        </div>
+        <ConceptsSelector selected={selectedConcepts} onChange={setSelectedConcepts} />
       </div>
 
       <div>
