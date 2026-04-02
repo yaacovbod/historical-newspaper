@@ -62,36 +62,40 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen" style={{ background: '#1a1a2e' }}>
+    <div className="min-h-screen" style={{ background: '#f5f0e8' }}>
       <main className="max-w-3xl mx-auto px-4 py-12">
+
         {/* Header */}
         <div className="mb-10 text-center">
-          <h1
-            className="text-4xl font-extrabold mb-3 tracking-tight"
-            style={{ background: 'linear-gradient(90deg, #e0c3fc, #8ec5fc)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
-          >
+          <div className="mb-2 text-xs tracking-widest uppercase" style={{ color: '#8a6a50', fontFamily: 'Crimson Text, serif', letterSpacing: '0.2em' }}>
+            תוכנית הבגרויות הגמישה
+          </div>
+          <h1 style={{ fontFamily: 'Playfair Display, Georgia, serif', fontSize: '2.4rem', fontWeight: 800, color: '#2c1810', lineHeight: 1.2 }}>
             מחולל העיתון ההיסטורי
           </h1>
-          <p className="text-sm" style={{ color: '#9090b0' }}>כלי לתלמידי בגרות ליצירת כתבות עיתון היסטוריות</p>
+          <div style={{ width: '60px', height: '2px', background: '#8b4513', margin: '0.75rem auto' }} />
+          <p style={{ color: '#5c3d1e', fontFamily: 'Crimson Text, serif', fontSize: '1.05rem' }}>
+            כלי לתלמידי בגרות ליצירת כתבות עיתון היסטוריות
+          </p>
         </div>
 
         {/* Content card */}
-        <div className="rounded-2xl p-8" style={{ background: '#16213e', border: '1px solid #2a2a4a' }}>
+        <div className="rounded-xl p-8" style={{ background: '#fffdf7', border: '1px solid #c9b99a', boxShadow: '0 2px 12px rgba(44,24,16,0.07)' }}>
 
           {/* בחירת אשכול */}
           {stage === 'cluster' && (
             <div className="space-y-6">
-              <h2 className="text-xl font-bold" style={{ color: '#e0c3fc' }}>בחר אשכול</h2>
+              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.4rem', color: '#2c1810' }}>בחר אשכול</h2>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {CLUSTERS.map(c => (
                   <button
                     key={c.id}
                     onClick={() => handleSelectCluster(c)}
-                    className="rounded-xl p-6 text-right transition-transform hover:scale-105 hover:brightness-110 active:scale-95"
-                    style={{ background: c.gradient, border: 'none' }}
+                    className="rounded-xl p-6 text-right transition-all hover:brightness-95 active:scale-95"
+                    style={{ background: '#8b4513', border: 'none', boxShadow: '0 2px 8px rgba(139,69,19,0.3)' }}
                   >
-                    <div className="font-bold text-white text-lg mb-2">{c.title}</div>
-                    <div className="text-sm" style={{ color: 'rgba(255,255,255,0.85)' }}>{c.subtitle}</div>
+                    <div style={{ fontFamily: 'Playfair Display, serif', fontWeight: 700, color: '#fff', fontSize: '1.1rem', marginBottom: '0.4rem' }}>{c.title}</div>
+                    <div style={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.9rem', fontFamily: 'Crimson Text, serif' }}>{c.subtitle}</div>
                   </button>
                 ))}
               </div>
@@ -103,12 +107,12 @@ export default function Home() {
               <button
                 onClick={() => setStage('cluster')}
                 className="text-sm mb-4 block hover:underline"
-                style={{ color: '#8ec5fc' }}
+                style={{ color: '#8b4513', fontFamily: 'Crimson Text, serif' }}
               >
                 ← חזור לבחירת אשכול
               </button>
-              <div className="mb-6 px-3 py-2 rounded-lg text-sm" style={{ background: '#1e1e3a', border: '1px solid #3a3a6a', color: '#c0c0d8' }}>
-                אשכול: <span className="font-semibold" style={{ color: '#e0c3fc' }}>{cluster.title}</span>
+              <div className="mb-6 px-3 py-2 rounded-lg text-sm" style={{ background: '#f5f0e8', border: '1px solid #c9b99a', color: '#5c3d1e' }}>
+                אשכול: <span style={{ fontWeight: 700, color: '#2c1810', fontFamily: 'Playfair Display, serif' }}>{cluster.title}</span>
               </div>
               <ArticleTypeSelector onSelect={handleSelectType} />
             </div>
@@ -119,12 +123,12 @@ export default function Home() {
               <button
                 onClick={() => setStage('select')}
                 className="text-sm mb-6 block hover:underline"
-                style={{ color: '#8ec5fc' }}
+                style={{ color: '#8b4513', fontFamily: 'Crimson Text, serif' }}
               >
                 ← חזור לבחירת סוג
               </button>
               {error && (
-                <div className="rounded-lg px-4 py-3 mb-4 text-sm" style={{ background: '#2d1b1b', border: '1px solid #7f3030', color: '#f08080' }}>
+                <div className="rounded-lg px-4 py-3 mb-4 text-sm" style={{ background: '#fdf0ec', border: '1px solid #c9806a', color: '#7a2e1a' }}>
                   {error}
                 </div>
               )}
@@ -144,9 +148,9 @@ export default function Home() {
             <div className="text-center py-16">
               <div
                 className="inline-block w-10 h-10 rounded-full animate-spin mb-4"
-                style={{ border: '4px solid #2a2a4a', borderTopColor: '#8ec5fc' }}
+                style={{ border: '3px solid #c9b99a', borderTopColor: '#8b4513' }}
               />
-              <p style={{ color: '#9090b0' }}>מייצר כתבה...</p>
+              <p style={{ color: '#5c3d1e', fontFamily: 'Crimson Text, serif', fontSize: '1.1rem' }}>מייצר כתבה...</p>
             </div>
           )}
 

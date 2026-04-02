@@ -29,7 +29,7 @@ export default function SourcesList({ sources, onChange }: Props) {
             onChange={e => update(i, e.target.value)}
             rows={3}
             className="flex-1 px-3 py-2 resize-y text-sm rounded-xl"
-            style={{ background: '#0f0f23', border: '1px solid #2a2a4a', color: '#e8e8f0' }}
+            style={{ background: '#faf7f2', border: '1px solid #c9b99a', color: '#2c1810' }}
             placeholder={`מקור ${i + 1} — שם מחבר, שנה, ציטוט...`}
           />
           {sources.length > 1 && (
@@ -37,7 +37,7 @@ export default function SourcesList({ sources, onChange }: Props) {
               type="button"
               onClick={() => remove(i)}
               className="mt-1 text-lg leading-none hover:opacity-70"
-              style={{ color: '#f08080' }}
+              style={{ color: '#8b4513' }}
               aria-label="הסר מקור"
             >
               ×
@@ -49,7 +49,7 @@ export default function SourcesList({ sources, onChange }: Props) {
         type="button"
         onClick={add}
         className="text-sm px-4 py-1.5 rounded-xl transition-opacity hover:opacity-80"
-        style={{ background: '#2a2a4a', color: '#8ec5fc', border: '1px solid #3a3a6a' }}
+        style={{ background: '#f5f0e8', color: '#8b4513', border: '1px solid #c9b99a' }}
       >
         + הוסף מקור
       </button>

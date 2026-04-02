@@ -13,7 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="he" dir="rtl">
-      <body className="min-h-screen bg-gray-50">{children}</body>
+      <body className="min-h-screen" style={{ background: '#f5f0e8' }}>{children}</body>
     </html>
   );
 }

@@ -9,8 +9,8 @@ interface Props {
   concepts?: string[]
 }
 
-const inputStyle = { background: '#0f0f23', border: '1px solid #2a2a4a', color: '#e8e8f0' }
-const labelStyle = { color: '#c0c0d8' }
+const inputStyle = { background: '#faf7f2', border: '1px solid #c9b99a', color: '#2c1810' }
+const labelStyle = { color: '#5c3d1e' }
 
 export default function ConceptsSelector({ selected, onChange, concepts: conceptsProp }: Props) {
   const allConcepts = conceptsProp ?? HISTORICAL_CONCEPTS
@@ -59,7 +59,7 @@ export default function ConceptsSelector({ selected, onChange, concepts: concept
             <span
               key={concept}
               className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs"
-              style={{ background: '#1e1e3a', border: '1px solid #4a4a8a', color: '#c0c0d8' }}
+              style={{ background: '#f5f0e8', border: '1px solid #c9b99a', color: '#5c3d1e' }}
             >
               <input
                 type="checkbox"
@@ -72,7 +72,7 @@ export default function ConceptsSelector({ selected, onChange, concepts: concept
                 type="button"
                 onClick={() => removeCustom(concept)}
                 className="mr-1 hover:opacity-60"
-                style={{ color: '#9090b0' }}
+                style={{ color: '#8a6a50' }}
               >
                 ✕
               </button>
@@ -96,7 +96,7 @@ export default function ConceptsSelector({ selected, onChange, concepts: concept
           onClick={addCustom}
           disabled={!customInput.trim()}
           className="px-3 py-1.5 rounded-xl text-sm transition-opacity hover:opacity-80 disabled:opacity-30"
-          style={{ background: '#2a2a6a', color: '#c0c0f8', border: '1px solid #4a4a8a' }}
+          style={{ background: '#8b4513', color: '#fff', border: 'none' }}
         >
           הוסף
         </button>

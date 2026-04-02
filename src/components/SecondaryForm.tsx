@@ -13,9 +13,9 @@ interface Props {
 }
 
 const inputClass = 'w-full px-3 py-2 rounded-xl text-sm'
-const inputStyle = { background: '#0f0f23', border: '1px solid #2a2a4a', color: '#e8e8f0' }
+const inputStyle = { background: '#faf7f2', border: '1px solid #c9b99a', color: '#2c1810' }
 const labelClass = 'block text-sm font-medium mb-1'
-const labelStyle = { color: '#c0c0d8' }
+const labelStyle = { color: '#5c3d1e' }
 
 export default function SecondaryForm({ onSubmit, loading, concepts, clusterTitle }: Props) {
   const [topic, setTopic] = useState('')
@@ -100,7 +100,7 @@ export default function SecondaryForm({ onSubmit, loading, concepts, clusterTitl
         <label className={labelClass} style={labelStyle}>מין הכותב</label>
         <div className="flex gap-4">
           {(['male', 'female', 'plural'] as const).map(g => (
-            <label key={g} className="flex items-center gap-1 cursor-pointer text-sm" style={{ color: '#c0c0d8' }}>
+            <label key={g} className="flex items-center gap-1 cursor-pointer text-sm" style={{ color: '#5c3d1e' }}>
               <input
                 type="radio"
                 name="authorGender"
@@ -128,7 +128,7 @@ export default function SecondaryForm({ onSubmit, loading, concepts, clusterTitl
         type="submit"
         disabled={loading}
         className="px-6 py-2 rounded-xl font-medium transition-opacity hover:opacity-80 disabled:opacity-40"
-        style={{ background: 'linear-gradient(135deg, #f093fb, #f5576c)', color: '#fff' }}
+        style={{ background: '#8b4513', color: '#fff' }}
       >
         {loading ? 'מייצר...' : 'צור כתבת משנה'}
       </button>
