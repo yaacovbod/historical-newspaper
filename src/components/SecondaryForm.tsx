@@ -22,7 +22,6 @@ export default function SecondaryForm({ onSubmit, loading, concepts, clusterTitl
   const [subTopic, setSubTopic] = useState('')
   const [subGenre, setSubGenre] = useState<SecondaryFormData['subGenre']>('interview')
   const [authorGender, setAuthorGender] = useState<SecondaryFormData['authorGender']>('male')
-  const [pluralGender, setPluralGender] = useState<'male' | 'female'>('male')
   const [selectedConcepts, setSelectedConcepts] = useState<string[]>([])
   const [sources, setSources] = useState<string[]>([''])
   const [notes, setNotes] = useState('')
@@ -36,7 +35,6 @@ export default function SecondaryForm({ onSubmit, loading, concepts, clusterTitl
       subTopic,
       subGenre,
       authorGender,
-      pluralGender: authorGender === 'plural' ? pluralGender : undefined,
       selectedConcepts,
       sources: sources.filter(Boolean).join('\n\n---\n\n'),
       notes: notes || undefined,
@@ -88,7 +86,7 @@ export default function SecondaryForm({ onSubmit, loading, concepts, clusterTitl
       <div>
         <label className={labelClass} style={labelStyle}>מין הכותב</label>
         <div className="flex gap-4">
-          {(['male', 'female', 'plural'] as const).map(g => (
+          {(['male', 'female'] as const).map(g => (
             <label key={g} className="flex items-center gap-1 cursor-pointer text-sm" style={{ color: '#5c3d1e' }}>
               <input
                 type="radio"
@@ -97,26 +95,10 @@ export default function SecondaryForm({ onSubmit, loading, concepts, clusterTitl
                 checked={authorGender === g}
                 onChange={() => setAuthorGender(g)}
               />
-              {g === 'male' ? 'זכר' : g === 'female' ? 'נקבה' : 'צוות'}
+              {g === 'male' ? 'זכר' : 'נקבה'}
             </label>
           ))}
         </div>
-        {authorGender === 'plural' && (
-          <div className="flex gap-4 mt-2">
-            {(['male', 'female'] as const).map(pg => (
-              <label key={pg} className="flex items-center gap-1 cursor-pointer text-sm" style={{ color: '#5c3d1e' }}>
-                <input
-                  type="radio"
-                  name="pluralGender"
-                  value={pg}
-                  checked={pluralGender === pg}
-                  onChange={() => setPluralGender(pg)}
-                />
-                {pg === 'male' ? 'רבים' : 'רבות'}
-              </label>
-            ))}
-          </div>
-        )}
       </div>
 
       <div>

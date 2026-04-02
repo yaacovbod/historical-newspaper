@@ -1,8 +1,6 @@
 export interface BaseFormData {
   cluster: string
   topic: string
-  authorGender: 'male' | 'female' | 'plural'
-  pluralGender?: 'male' | 'female'
   selectedConcepts: string[]
   sources: string
   curriculumCluster?: string
@@ -17,6 +15,7 @@ export interface SecondaryFormData extends BaseFormData {
   articleType: 'secondary'
   subGenre: 'interview' | 'opinion' | 'letter'
   subTopic: string
+  authorGender: 'male' | 'female'
 }
 
 export interface EditorialFormData {

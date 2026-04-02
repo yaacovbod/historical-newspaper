@@ -19,8 +19,6 @@ const labelStyle = { color: '#5c3d1e' }
 
 export default function NewsForm({ onSubmit, loading, concepts, clusterTitle }: Props) {
   const [topic, setTopic] = useState('')
-  const [authorGender, setAuthorGender] = useState<NewsFormData['authorGender']>('male')
-  const [pluralGender, setPluralGender] = useState<'male' | 'female'>('male')
   const [selectedConcepts, setSelectedConcepts] = useState<string[]>([])
   const [sources, setSources] = useState<string[]>([''])
   const [notes, setNotes] = useState('')
@@ -31,8 +29,6 @@ export default function NewsForm({ onSubmit, loading, concepts, clusterTitle }: 
       articleType: 'news',
       cluster: clusterTitle,
       topic,
-      authorGender,
-      pluralGender: authorGender === 'plural' ? pluralGender : undefined,
       selectedConcepts,
       sources: sources.filter(Boolean).join('\n\n---\n\n'),
       notes: notes || undefined,
@@ -54,41 +50,8 @@ export default function NewsForm({ onSubmit, loading, concepts, clusterTitle }: 
         />
       </div>
 
-      <div>
-        <label className={labelClass} style={labelStyle}>מין הכותב</label>
-        <div className="flex gap-4">
-          {(['male', 'female', 'plural'] as const).map(g => (
-            <label key={g} className="flex items-center gap-1 cursor-pointer text-sm" style={{ color: '#5c3d1e' }}>
-              <input
-                type="radio"
-                name="authorGender"
-                value={g}
-                checked={authorGender === g}
-                onChange={() => setAuthorGender(g)}
-              />
-              {g === 'male' ? 'זכר' : g === 'female' ? 'נקבה' : 'צוות'}
-            </label>
-          ))}
-        </div>
-        {authorGender === 'plural' && (
-          <div className="flex gap-4 mt-2">
-            {(['male', 'female'] as const).map(pg => (
-              <label key={pg} className="flex items-center gap-1 cursor-pointer text-sm" style={{ color: '#5c3d1e' }}>
-                <input
-                  type="radio"
-                  name="pluralGender"
-                  value={pg}
-                  checked={pluralGender === pg}
-                  onChange={() => setPluralGender(pg)}
-                />
-                {pg === 'male' ? 'רבים' : 'רבות'}
-              </label>
-            ))}
-          </div>
-        )}
-      </div>
 
-      <div>
+<div>
         <label className={labelClass} style={labelStyle}>מושגים לשילוב</label>
         <ConceptsSelector selected={selectedConcepts} onChange={setSelectedConcepts} concepts={concepts} />
       </div>

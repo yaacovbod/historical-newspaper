@@ -41,14 +41,10 @@ export function buildNewsPrompt(data: NewsFormData): { system: string; user: str
 האם יש מראי מקום מדויקים לכל טענה?
 האם נמנעת לחלוטין ממידע חיצוני שלא הופיע במקורות?
 
-התאמה לכותב: זכר — גוף ראשון זכר | נקבה — גוף ראשון נקבה | צוות רבים — גוף ראשון רבים | צוות רבות — גוף ראשון רבות.
-
 פורמט הפלט: הצג את הכתבה המוכנה בלבד, ואחריה את נספח הניתוח האקדמי. ללא הסברים או הערות מטא.`
 
-  const genderLabel = data.authorGender === 'male' ? 'זכר' : data.authorGender === 'female' ? 'נקבה' : data.pluralGender === 'female' ? 'צוות רבות' : 'צוות רבים'
   const USER = `${data.curriculumCluster ? `נושא לימודי: ${data.curriculumCluster}\n` : ''}אשכול: ${data.cluster}
 נושא: ${data.topic}
-מין הכותב: ${genderLabel}
 מושגים לשילוב: ${data.selectedConcepts.join(', ')}
 מקורות:
 ${data.sources}${data.notes ? `\n\nהערות מיוחדות מהתלמיד:\n${data.notes}` : ''}
@@ -118,11 +114,11 @@ export function buildSecondaryPrompt(data: SecondaryFormData): { system: string;
 האם גוף הכתבה נקי לחלוטין מסימני רשימה (בולטים/כוכביות)?
 האם הנספח כתוב ללא כוכביות או מקפים — שורות פשוטות בלבד?
 
-התאמה לכותב: זכר — גוף ראשון זכר | נקבה — גוף ראשון נקבה | צוות רבים — גוף ראשון רבים | צוות רבות — גוף ראשון רבות.
+התאמה לכותב: זכר — גוף ראשון זכר | נקבה — גוף ראשון נקבה.
 
 פורמט הפלט: הצג את הכתבה המוכנה בלבד, ואחריה את נספח הניתוח. ללא הסברים או הערות מטא.`
 
-  const genderLabel = data.authorGender === 'male' ? 'זכר' : data.authorGender === 'female' ? 'נקבה' : data.pluralGender === 'female' ? 'צוות רבות' : 'צוות רבים'
+  const genderLabel = data.authorGender === 'male' ? 'זכר' : 'נקבה'
   const USER = `${data.curriculumCluster ? `נושא לימודי: ${data.curriculumCluster}\n` : ''}אשכול: ${data.cluster}
 נושא כתבת המשנה: ${data.subTopic}
 סוגה: ${data.subGenre}
