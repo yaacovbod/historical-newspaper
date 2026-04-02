@@ -14,20 +14,17 @@ const labelClass = 'block text-sm font-medium mb-1'
 const labelStyle = { color: '#5c3d1e' }
 
 export default function EditorialForm({ onSubmit, loading, clusterTitle }: Props) {
-  const [teamSize, setTeamSize] = useState(1)
   const [authorGender, setAuthorGender] = useState<EditorialFormData['authorGender']>('male')
   const [mainArticleText, setMainArticleText] = useState('')
-  const [secondaryArticleTexts, setSecondaryArticleTexts] = useState<string[]>([''])
+  const [secondaryArticleTexts, setSecondaryArticleTexts] = useState<string[]>([])
   const [notes, setNotes] = useState('')
 
-  function handleTeamSizeChange(val: number) {
-    const size = Math.max(1, val)
-    setTeamSize(size)
-    setSecondaryArticleTexts(prev => {
-      const next = [...prev]
-      while (next.length < size) next.push('')
-      return next.slice(0, size)
-    })
+  function addSecondary() {
+    setSecondaryArticleTexts(prev => [...prev, ''])
+  }
+
+  function removeSecondary(index: number) {
+    setSecondaryArticleTexts(prev => prev.filter((_, i) => i !== index))
   }
 
   function updateSecondary(index: number, value: string) {
@@ -40,25 +37,11 @@ export default function EditorialForm({ onSubmit, loading, clusterTitle }: Props
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    onSubmit({ articleType: 'editorial', cluster: clusterTitle, teamSize, authorGender, mainArticleText, secondaryArticleTexts, notes: notes || undefined })
+    onSubmit({ articleType: 'editorial', cluster: clusterTitle, teamSize: secondaryArticleTexts.length + 1, authorGender, mainArticleText, secondaryArticleTexts, notes: notes || undefined })
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div>
-        <label className={labelClass} style={labelStyle}>גודל הצוות</label>
-        <input
-          type="number"
-          min={1}
-          value={teamSize}
-          onChange={e => handleTeamSizeChange(Number(e.target.value))}
-          required
-          className="w-24 px-3 py-2 rounded-xl text-sm"
-          style={inputStyle}
-        />
-        <p className="text-xs mt-1" style={{ color: '#6060a0' }}>מספר כתבות המשנה יתאים לגודל הצוות</p>
-      </div>
-
       <div>
         <label className={labelClass} style={labelStyle}>מין הכותב</label>
         <div className="flex gap-4">
@@ -91,12 +74,35 @@ export default function EditorialForm({ onSubmit, loading, clusterTitle }: Props
       </div>
 
       <div className="space-y-4">
-        <label className={labelClass} style={labelStyle}>
-          כתבות משנה ({secondaryArticleTexts.length})
-        </label>
+        <div className="flex items-center justify-between">
+          <label className={labelClass} style={{ ...labelStyle, marginBottom: 0 }}>
+            כתבות משנה {secondaryArticleTexts.length > 0 && `(${secondaryArticleTexts.length})`}
+          </label>
+          <button
+            type="button"
+            onClick={addSecondary}
+            className="px-4 py-1.5 rounded-lg text-sm font-medium transition-opacity hover:opacity-80"
+            style={{ background: '#8b4513', color: '#fff' }}
+          >
+            + הוסף כתבת משנה
+          </button>
+        </div>
+        {secondaryArticleTexts.length === 0 && (
+          <p className="text-sm" style={{ color: '#8a6a50' }}>לחץ על הכפתור להוספת כתבת משנה</p>
+        )}
         {secondaryArticleTexts.map((text, i) => (
           <div key={i}>
-            <p className="text-xs mb-1" style={{ color: '#6060a0' }}>כתבת משנה {i + 1}</p>
+            <div className="flex items-center justify-between mb-1">
+              <p className="text-xs" style={{ color: '#6060a0' }}>כתבת משנה {i + 1}</p>
+              <button
+                type="button"
+                onClick={() => removeSecondary(i)}
+                className="text-xs hover:underline"
+                style={{ color: '#c0392b' }}
+              >
+                הסר
+              </button>
+            </div>
             <textarea
               value={text}
               onChange={e => updateSecondary(i, e.target.value)}
