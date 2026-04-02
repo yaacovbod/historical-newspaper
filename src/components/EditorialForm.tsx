@@ -16,7 +16,7 @@ const labelStyle = { color: '#5c3d1e' }
 export default function EditorialForm({ onSubmit, loading, clusterTitle }: Props) {
   const [authorGender, setAuthorGender] = useState<EditorialFormData['authorGender']>('male')
   const [mainArticleText, setMainArticleText] = useState('')
-  const [secondaryArticleTexts, setSecondaryArticleTexts] = useState<string[]>([])
+  const [secondaryArticleTexts, setSecondaryArticleTexts] = useState<string[]>([''])
   const [notes, setNotes] = useState('')
 
   function addSecondary() {
