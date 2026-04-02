@@ -19,8 +19,8 @@ const labelStyle = { color: '#5c3d1e' }
 
 export default function NewsForm({ onSubmit, loading, concepts, clusterTitle }: Props) {
   const [topic, setTopic] = useState('')
-  const [teamSize, setTeamSize] = useState(1)
   const [authorGender, setAuthorGender] = useState<NewsFormData['authorGender']>('male')
+  const [pluralGender, setPluralGender] = useState<'male' | 'female'>('male')
   const [selectedConcepts, setSelectedConcepts] = useState<string[]>([])
   const [sources, setSources] = useState<string[]>([''])
   const [notes, setNotes] = useState('')
@@ -31,8 +31,8 @@ export default function NewsForm({ onSubmit, loading, concepts, clusterTitle }: 
       articleType: 'news',
       cluster: clusterTitle,
       topic,
-      teamSize,
       authorGender,
+      pluralGender: authorGender === 'plural' ? pluralGender : undefined,
       selectedConcepts,
       sources: sources.filter(Boolean).join('\n\n---\n\n'),
       notes: notes || undefined,
@@ -55,19 +55,6 @@ export default function NewsForm({ onSubmit, loading, concepts, clusterTitle }: 
       </div>
 
       <div>
-        <label className={labelClass} style={labelStyle}>גודל הצוות</label>
-        <input
-          type="number"
-          min={1}
-          value={teamSize}
-          onChange={e => setTeamSize(Number(e.target.value))}
-          required
-          className="w-24 px-3 py-2 rounded-xl text-sm"
-          style={inputStyle}
-        />
-      </div>
-
-      <div>
         <label className={labelClass} style={labelStyle}>מין הכותב</label>
         <div className="flex gap-4">
           {(['male', 'female', 'plural'] as const).map(g => (
@@ -83,6 +70,22 @@ export default function NewsForm({ onSubmit, loading, concepts, clusterTitle }: 
             </label>
           ))}
         </div>
+        {authorGender === 'plural' && (
+          <div className="flex gap-4 mt-2">
+            {(['male', 'female'] as const).map(pg => (
+              <label key={pg} className="flex items-center gap-1 cursor-pointer text-sm" style={{ color: '#5c3d1e' }}>
+                <input
+                  type="radio"
+                  name="pluralGender"
+                  value={pg}
+                  checked={pluralGender === pg}
+                  onChange={() => setPluralGender(pg)}
+                />
+                {pg === 'male' ? 'רבים' : 'רבות'}
+              </label>
+            ))}
+          </div>
+        )}
       </div>
 
       <div>

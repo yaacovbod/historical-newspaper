@@ -41,13 +41,14 @@ export function buildNewsPrompt(data: NewsFormData): { system: string; user: str
 האם יש מראי מקום מדויקים לכל טענה?
 האם נמנעת לחלוטין ממידע חיצוני שלא הופיע במקורות?
 
-התאמה לכותב: זכר — גוף ראשון זכר | נקבה — גוף ראשון נקבה | צוות — גוף ראשון רבים.
+התאמה לכותב: זכר — גוף ראשון זכר | נקבה — גוף ראשון נקבה | צוות רבים — גוף ראשון רבים | צוות רבות — גוף ראשון רבות.
 
 פורמט הפלט: הצג את הכתבה המוכנה בלבד, ואחריה את נספח הניתוח האקדמי. ללא הסברים או הערות מטא.`
 
+  const genderLabel = data.authorGender === 'male' ? 'זכר' : data.authorGender === 'female' ? 'נקבה' : data.pluralGender === 'female' ? 'צוות רבות' : 'צוות רבים'
   const USER = `${data.curriculumCluster ? `נושא לימודי: ${data.curriculumCluster}\n` : ''}אשכול: ${data.cluster}
 נושא: ${data.topic}
-גודל צוות: ${data.teamSize} | מין הכותב: ${data.authorGender}
+מין הכותב: ${genderLabel}
 מושגים לשילוב: ${data.selectedConcepts.join(', ')}
 מקורות:
 ${data.sources}${data.notes ? `\n\nהערות מיוחדות מהתלמיד:\n${data.notes}` : ''}
@@ -117,14 +118,15 @@ export function buildSecondaryPrompt(data: SecondaryFormData): { system: string;
 האם גוף הכתבה נקי לחלוטין מסימני רשימה (בולטים/כוכביות)?
 האם הנספח כתוב ללא כוכביות או מקפים — שורות פשוטות בלבד?
 
-התאמה לכותב: זכר — גוף ראשון זכר | נקבה — גוף ראשון נקבה | צוות — גוף ראשון רבים.
+התאמה לכותב: זכר — גוף ראשון זכר | נקבה — גוף ראשון נקבה | צוות רבים — גוף ראשון רבים | צוות רבות — גוף ראשון רבות.
 
 פורמט הפלט: הצג את הכתבה המוכנה בלבד, ואחריה את נספח הניתוח. ללא הסברים או הערות מטא.`
 
+  const genderLabel = data.authorGender === 'male' ? 'זכר' : data.authorGender === 'female' ? 'נקבה' : data.pluralGender === 'female' ? 'צוות רבות' : 'צוות רבים'
   const USER = `${data.curriculumCluster ? `נושא לימודי: ${data.curriculumCluster}\n` : ''}אשכול: ${data.cluster}
 נושא כתבת המשנה: ${data.subTopic}
 סוגה: ${data.subGenre}
-גודל צוות: ${data.teamSize} | מין הכותב: ${data.authorGender}
+מין הכותב: ${genderLabel}
 מושגים לשילוב: ${data.selectedConcepts.join(', ')}
 מקורות:
 ${data.sources}${data.notes ? `\n\nהערות מיוחדות מהתלמיד:\n${data.notes}` : ''}
@@ -162,9 +164,11 @@ export function buildEditorialPrompt(data: EditorialFormData): { system: string;
 
 שלב 3: דגשי סגנון ובקרת איכות
 
-התאמה למספר הכותבים:
-צוות: כתיבה בגוף ראשון רבים ("אנו כעורכים", "מצאנו", "הגענו למסקנה").
-יחיד/ה: כתיבה בגוף ראשון יחיד/ה ("כעורך/ת העיתון", "מצאתי", "הגעתי למסקנה"), תוך הקפדה דקדוקית על המין שנמסר.
+התאמה לכותב:
+צוות רבים: כתיבה בגוף ראשון רבים זכר ("אנו כעורכים", "מצאנו", "הגענו למסקנה").
+צוות רבות: כתיבה בגוף ראשון רבים נקבה ("אנו כעורכות", "מצאנו", "הגענו למסקנה").
+זכר: כתיבה בגוף ראשון יחיד זכר ("כעורך העיתון", "מצאתי", "הגעתי למסקנה").
+נקבה: כתיבה בגוף ראשון יחיד נקבה ("כעורכת העיתון", "מצאתי", "הגעתי למסקנה").
 
 בדיקה עצמית לפני פלט:
 האם הטקסט הוא רצף של פסקאות ללא סימני רשימה (מקפים/נקודות)?
@@ -178,8 +182,9 @@ export function buildEditorialPrompt(data: EditorialFormData): { system: string;
     .map((text, i) => `===כתבת משנה ${i + 1}===\n${text}`)
     .join('\n\n')
 
+  const genderLabel = data.authorGender === 'male' ? 'זכר' : data.authorGender === 'female' ? 'נקבה' : data.pluralGender === 'female' ? 'צוות רבות' : 'צוות רבים'
   const USER = `${data.curriculumCluster ? `נושא לימודי: ${data.curriculumCluster}\n` : ''}אשכול: ${data.cluster}
-גודל צוות: ${data.teamSize} | מין הכותב: ${data.authorGender}${data.notes ? `\n\nהערות מיוחדות מהתלמיד:\n${data.notes}` : ''}
+מין הכותב: ${genderLabel}${data.notes ? `\n\nהערות מיוחדות מהתלמיד:\n${data.notes}` : ''}
 
 ===כתבה ראשית===
 ${data.mainArticleText}

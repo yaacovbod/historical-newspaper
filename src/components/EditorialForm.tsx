@@ -15,6 +15,7 @@ const labelStyle = { color: '#5c3d1e' }
 
 export default function EditorialForm({ onSubmit, loading, clusterTitle }: Props) {
   const [authorGender, setAuthorGender] = useState<EditorialFormData['authorGender']>('male')
+  const [pluralGender, setPluralGender] = useState<'male' | 'female'>('male')
   const [mainArticleText, setMainArticleText] = useState('')
   const [secondaryArticleTexts, setSecondaryArticleTexts] = useState<string[]>([''])
   const [notes, setNotes] = useState('')
@@ -37,7 +38,7 @@ export default function EditorialForm({ onSubmit, loading, clusterTitle }: Props
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    onSubmit({ articleType: 'editorial', cluster: clusterTitle, teamSize: secondaryArticleTexts.length + 1, authorGender, mainArticleText, secondaryArticleTexts, notes: notes || undefined })
+    onSubmit({ articleType: 'editorial', cluster: clusterTitle, authorGender, pluralGender: authorGender === 'plural' ? pluralGender : undefined, mainArticleText, secondaryArticleTexts, notes: notes || undefined })
   }
 
   return (
@@ -58,6 +59,22 @@ export default function EditorialForm({ onSubmit, loading, clusterTitle }: Props
             </label>
           ))}
         </div>
+        {authorGender === 'plural' && (
+          <div className="flex gap-4 mt-2">
+            {(['male', 'female'] as const).map(pg => (
+              <label key={pg} className="flex items-center gap-1 cursor-pointer text-sm" style={{ color: '#5c3d1e' }}>
+                <input
+                  type="radio"
+                  name="pluralGender"
+                  value={pg}
+                  checked={pluralGender === pg}
+                  onChange={() => setPluralGender(pg)}
+                />
+                {pg === 'male' ? 'רבים' : 'רבות'}
+              </label>
+            ))}
+          </div>
+        )}
       </div>
 
       <div>
