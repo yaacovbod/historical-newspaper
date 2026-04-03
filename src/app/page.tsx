@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { useAuth, SignInButton, UserButton } from '@clerk/nextjs'
 import ArticleTypeSelector from '@/components/ArticleTypeSelector'
 import NewsForm from '@/components/NewsForm'
@@ -50,6 +51,12 @@ export default function Home() {
       }
       setResult(json.result)
       setStage('result')
+      // שמירה ב-KV בצורה שקטה
+      fetch('/api/articles', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: json.result, articleType: data.articleType, clusterTitle: cluster?.title }),
+      }).catch(() => {})
     } catch {
       setError('שגיאת רשת — בדוק את החיבור ונסה שוב')
       setStage('form')
@@ -83,7 +90,14 @@ export default function Home() {
     <div className="min-h-screen">
       {/* Auth bar */}
       <div className="flex justify-between items-center px-6 py-3" style={{ background: '#f5f0e8', borderBottom: '1px solid #c9b99a' }}>
-        <span style={{ color: '#8a6a50', fontSize: '0.85rem', fontFamily: 'inherit' }}>מחולל העיתון ההיסטורי</span>
+        <div className="flex items-center gap-4">
+          <span style={{ color: '#8a6a50', fontSize: '0.85rem', fontFamily: 'inherit' }}>מחולל העיתון ההיסטורי</span>
+          {isSignedIn && (
+            <Link href="/my-articles" style={{ color: '#8b4513', fontSize: '0.85rem', fontFamily: 'inherit', textDecoration: 'none', fontWeight: 700 }}>
+              הכתבות שלי
+            </Link>
+          )}
+        </div>
         {!isSignedIn ? (
           <SignInButton mode="modal">
             <button
