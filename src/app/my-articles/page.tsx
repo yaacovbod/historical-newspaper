@@ -1,4 +1,4 @@
-import { auth } from '@clerk/nextjs/server'
+import { auth, currentUser } from '@clerk/nextjs/server'
 import { redis } from '@/lib/redis'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
@@ -21,13 +21,18 @@ export default async function MyArticlesPage() {
   const { userId } = await auth()
   if (!userId) redirect('/sign-in')
 
+  const clerkUser = await currentUser()
+  const isAdmin = clerkUser?.emailAddresses.some(e => e.emailAddress === 'yaacovbod@gmail.com')
+
   let articles: Article[] = []
   let kvError = false
   let usedCount = 0
 
   try {
-    const countRaw = await redis.get(`articles_count:${userId}`)
-    usedCount = countRaw ? parseInt(String(countRaw), 10) : 0
+    if (!isAdmin) {
+      const countRaw = await redis.get(`articles_count:${userId}`)
+      usedCount = countRaw ? parseInt(String(countRaw), 10) : 0
+    }
 
     const timestamps = await redis.lrange(`user:${userId}:articles`, 0, -1)
     if (timestamps.length) {
@@ -56,7 +61,7 @@ export default async function MyArticlesPage() {
         <div className="mb-8 text-center">
           <h1 style={{ fontFamily: 'inherit', fontSize: '2rem', fontWeight: 800, color: '#2c1810' }}>הכתבות שלי</h1>
           <div style={{ width: '60px', height: '2px', background: '#8b4513', margin: '0.75rem auto' }} />
-          {!kvError && (
+          {!kvError && !isAdmin && (
             <p style={{ fontSize: '0.9rem', color: usedCount >= 5 ? '#c0392b' : '#8a6a50' }}>
               {usedCount >= 5
                 ? 'הגעת למכסה המקסימלית — לא ניתן ליצור כתבות נוספות'
