@@ -21,15 +21,20 @@ export default async function MyArticlesPage() {
   const { userId } = await auth()
   if (!userId) redirect('/sign-in')
 
-  const timestamps = await kv.lrange(`user:${userId}:articles`, 0, -1).catch(() => [])
   let articles: Article[] = []
+  let kvError = false
 
-  if ((timestamps as string[]).length) {
-    const keys = (timestamps as string[]).map(ts => `article:${userId}:${ts}`)
-    const raw = await kv.mget(...keys).catch(() => []) as (Record<string, string> | null)[]
-    articles = (timestamps as string[])
-      .map((ts, i) => ({ id: ts, ...raw[i] as Omit<Article, 'id'> }))
-      .filter(a => a.title)
+  try {
+    const timestamps = await kv.lrange(`user:${userId}:articles`, 0, -1) as string[]
+    if (timestamps.length) {
+      const keys = timestamps.map(ts => `article:${userId}:${ts}`)
+      const raw = await kv.mget(...keys) as (Record<string, string> | null)[]
+      articles = timestamps
+        .map((ts, i) => ({ id: ts, ...(raw[i] ?? {}) } as Article))
+        .filter(a => a.title)
+    }
+  } catch {
+    kvError = true
   }
 
   return (
@@ -47,7 +52,12 @@ export default async function MyArticlesPage() {
           <div style={{ width: '60px', height: '2px', background: '#8b4513', margin: '0.75rem auto' }} />
         </div>
 
-        {articles.length === 0 ? (
+        {kvError ? (
+          <div className="text-center py-16" style={{ color: '#8a6a50' }}>
+            <p style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>שגיאה בטעינת הכתבות</p>
+            <p style={{ fontSize: '0.85rem', color: '#b0956e' }}>ודא ש-KV_REST_API_URL ו-KV_REST_API_TOKEN מוגדרים ב-Vercel</p>
+          </div>
+        ) : articles.length === 0 ? (
           <div className="text-center py-16" style={{ color: '#8a6a50' }}>
             <p style={{ fontSize: '1.1rem', marginBottom: '1rem' }}>עוד לא שמרת כתבות</p>
             <Link
@@ -57,7 +67,7 @@ export default async function MyArticlesPage() {
               צור כתבה ראשונה
             </Link>
           </div>
-        ) : (
+        ) : articles.length > 0 ? (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {articles.map(article => (
               <Link
@@ -90,7 +100,7 @@ export default async function MyArticlesPage() {
               </Link>
             ))}
           </div>
-        )}
+        ) : null}
       </main>
     </div>
   )
