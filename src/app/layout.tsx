@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suez_One } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 
 const suezOne = Suez_One({ subsets: ["hebrew"], weight: "400" });
@@ -15,8 +16,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="he" dir="rtl">
-      <body className={`${suezOne.className} min-h-screen`}>{children}</body>
-    </html>
+    <ClerkProvider>
+      <html lang="he" dir="rtl">
+        <body className={`${suezOne.className} min-h-screen`}>{children}</body>
+      </html>
+    </ClerkProvider>
   );
 }
