@@ -23,8 +23,12 @@ export default async function MyArticlesPage() {
 
   let articles: Article[] = []
   let kvError = false
+  let usedCount = 0
 
   try {
+    const countRaw = await redis.get(`articles_count:${userId}`)
+    usedCount = countRaw ? parseInt(String(countRaw), 10) : 0
+
     const timestamps = await redis.lrange(`user:${userId}:articles`, 0, -1)
     if (timestamps.length) {
       const keys = timestamps.map(ts => `article:${userId}:${ts}`)
@@ -52,6 +56,13 @@ export default async function MyArticlesPage() {
         <div className="mb-8 text-center">
           <h1 style={{ fontFamily: 'inherit', fontSize: '2rem', fontWeight: 800, color: '#2c1810' }}>הכתבות שלי</h1>
           <div style={{ width: '60px', height: '2px', background: '#8b4513', margin: '0.75rem auto' }} />
+          {!kvError && (
+            <p style={{ fontSize: '0.9rem', color: usedCount >= 5 ? '#c0392b' : '#8a6a50' }}>
+              {usedCount >= 5
+                ? 'הגעת למכסה המקסימלית — לא ניתן ליצור כתבות נוספות'
+                : `נותרו ${5 - usedCount} כתבות מתוך 5`}
+            </p>
+          )}
         </div>
 
         {kvError ? (

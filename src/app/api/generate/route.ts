@@ -1,11 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { auth } from '@clerk/nextjs/server'
 import type { FormData } from '@/lib/types'
 import { buildNewsPrompt, buildSecondaryPrompt, buildEditorialPrompt } from '@/lib/prompts'
+import { redis } from '@/lib/redis'
+
+const MAX_ARTICLES = 5
 
 export async function POST(request: NextRequest) {
   const apiKey = process.env.GEMINI_API_KEY
   if (!apiKey) {
     return NextResponse.json({ error: 'GEMINI_API_KEY לא מוגדר' }, { status: 500 })
+  }
+
+  const { userId } = await auth()
+  if (!userId) return NextResponse.json({ error: 'לא מחובר' }, { status: 401 })
+
+  // בדיקת מכסה
+  const countRaw = await redis.get(`articles_count:${userId}`)
+  const count = countRaw ? parseInt(String(countRaw), 10) : 0
+  if (count >= MAX_ARTICLES) {
+    return NextResponse.json(
+      { error: 'הגעת למכסת הכתבות המקסימלית (5 כתבות)' },
+      { status: 403 }
+    )
   }
 
   let body: FormData
@@ -70,6 +87,9 @@ export async function POST(request: NextRequest) {
   if (!result) {
     return NextResponse.json({ error: 'לא התקבל תוכן מ-Gemini' }, { status: 502 })
   }
+
+  // העלאת המונה רק אחרי יצירה מוצלחת
+  await redis.incr(`articles_count:${userId}`)
 
   return NextResponse.json({ result })
 }
