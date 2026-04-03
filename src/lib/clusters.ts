@@ -1,5 +1,6 @@
 import { HISTORICAL_CONCEPTS } from './concepts'
 import { HAKAMAT_MEDINA_CONCEPTS } from './concepts-hakamat-medina'
+import { DECOLONIZATION_CONCEPTS } from './concepts-decolonization'
 
 export interface Cluster {
   id: string
@@ -23,5 +24,12 @@ export const CLUSTERS: Cluster[] = [
     subtitle: 'הדרך לעצמאות ישראל',
     gradient: 'linear-gradient(135deg, #f7971e 0%, #ffd200 100%)',
     concepts: HAKAMAT_MEDINA_CONCEPTS,
+  },
+  {
+    id: 'decolonization',
+    title: 'דה קולוניזציה ועצמאות ישראל',
+    subtitle: 'המלחמה הקרה, עלייה וחברה ישראלית',
+    gradient: 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
+    concepts: DECOLONIZATION_CONCEPTS,
   },
 ]
