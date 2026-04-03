@@ -78,7 +78,8 @@ export default function EditorialForm({ onSubmit, loading, clusterTitle }: Props
       </div>
 
       <div>
-        <label className={labelClass} style={labelStyle}>הדבק את הכתבה הראשית שנוצרה</label>
+        <label className={labelClass} style={labelStyle}>כתבה ראשית</label>
+        <p className="text-xs mb-2" style={{ color: '#8a6a50' }}>הדבק את הכתבה הראשית שיצרת בשלב הקודם בכלי זה</p>
         <textarea
           value={mainArticleText}
           onChange={e => setMainArticleText(e.target.value)}
@@ -86,15 +87,18 @@ export default function EditorialForm({ onSubmit, loading, clusterTitle }: Props
           required
           className="w-full px-3 py-2 rounded-xl resize-y font-mono text-sm"
           style={inputStyle}
-          placeholder="הדבק כאן את הכתבה הראשית שנוצרה בשלב הקודם..."
+          placeholder="הדבק כאן את הכתבה הראשית שנוצרה..."
         />
       </div>
 
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <label className={labelClass} style={{ ...labelStyle, marginBottom: 0 }}>
-            כתבות משנה {secondaryArticleTexts.length > 0 && `(${secondaryArticleTexts.length})`}
-          </label>
+          <div>
+            <label className={labelClass} style={{ ...labelStyle, marginBottom: 0 }}>
+              כתבות משנה {secondaryArticleTexts.length > 0 && `(${secondaryArticleTexts.length})`}
+            </label>
+            <p className="text-xs mt-0.5" style={{ color: '#8a6a50' }}>הדבק את הכתבות המשניות שיצרת בשלבים הקודמים</p>
+          </div>
           <button
             type="button"
             onClick={addSecondary}
@@ -127,7 +131,7 @@ export default function EditorialForm({ onSubmit, loading, clusterTitle }: Props
               required
               className="w-full px-3 py-2 rounded-xl resize-y font-mono text-sm"
               style={inputStyle}
-              placeholder={`הדבק כאן את כתבת המשנה ${i + 1}...`}
+              placeholder={`הדבק כאן את כתבת המשנה ${i + 1} שנוצרה...`}
             />
           </div>
         ))}
