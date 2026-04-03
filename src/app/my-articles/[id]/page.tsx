@@ -1,5 +1,5 @@
 import { auth } from '@clerk/nextjs/server'
-import { kv } from '@vercel/kv'
+import { redis } from '@/lib/redis'
 import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
 import ArticleMarkdown from '@/components/ArticleMarkdown'
@@ -23,7 +23,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
   if (!userId) redirect('/sign-in')
 
   const { id } = await params
-  const article = await kv.get<Article>(`article:${userId}:${id}`)
+  const article = await redis.get<Article>(`article:${userId}:${id}`)
   if (!article) notFound()
 
   return (

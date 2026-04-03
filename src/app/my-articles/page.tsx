@@ -1,5 +1,5 @@
 import { auth } from '@clerk/nextjs/server'
-import { kv } from '@vercel/kv'
+import { redis } from '@/lib/redis'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 
@@ -25,10 +25,10 @@ export default async function MyArticlesPage() {
   let kvError = false
 
   try {
-    const timestamps = await kv.lrange(`user:${userId}:articles`, 0, -1) as string[]
+    const timestamps = await redis.lrange(`user:${userId}:articles`, 0, -1) as string[]
     if (timestamps.length) {
       const keys = timestamps.map(ts => `article:${userId}:${ts}`)
-      const raw = await kv.mget(...keys) as (Record<string, string> | null)[]
+      const raw = await redis.mget(...keys) as (Record<string, string> | null)[]
       articles = timestamps
         .map((ts, i) => ({ id: ts, ...(raw[i] ?? {}) } as Article))
         .filter(a => a.title)
@@ -55,26 +55,19 @@ export default async function MyArticlesPage() {
         {kvError ? (
           <div className="text-center py-16" style={{ color: '#8a6a50' }}>
             <p style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>שגיאה בטעינת הכתבות</p>
-            <p style={{ fontSize: '0.85rem', color: '#b0956e' }}>ודא ש-KV_REST_API_URL ו-KV_REST_API_TOKEN מוגדרים ב-Vercel</p>
+            <p style={{ fontSize: '0.85rem', color: '#b0956e' }}>ודא ש-UPSTASH_REDIS_REST_URL ו-UPSTASH_REDIS_REST_TOKEN מוגדרים ב-Vercel</p>
           </div>
         ) : articles.length === 0 ? (
           <div className="text-center py-16" style={{ color: '#8a6a50' }}>
             <p style={{ fontSize: '1.1rem', marginBottom: '1rem' }}>עוד לא שמרת כתבות</p>
-            <Link
-              href="/"
-              style={{ color: '#8b4513', fontFamily: 'inherit', fontWeight: 700 }}
-            >
+            <Link href="/" style={{ color: '#8b4513', fontFamily: 'inherit', fontWeight: 700 }}>
               צור כתבה ראשונה
             </Link>
           </div>
-        ) : articles.length > 0 ? (
+        ) : (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {articles.map(article => (
-              <Link
-                key={article.id}
-                href={`/my-articles/${article.id}`}
-                style={{ textDecoration: 'none' }}
-              >
+              <Link key={article.id} href={`/my-articles/${article.id}`} style={{ textDecoration: 'none' }}>
                 <div
                   className="rounded-xl p-5 transition-all hover:brightness-95"
                   style={{ background: '#fff', border: '1px solid #c9b99a', boxShadow: '0 2px 8px rgba(44,24,16,0.06)', cursor: 'pointer' }}
@@ -100,7 +93,7 @@ export default async function MyArticlesPage() {
               </Link>
             ))}
           </div>
-        ) : null}
+        )}
       </main>
     </div>
   )
