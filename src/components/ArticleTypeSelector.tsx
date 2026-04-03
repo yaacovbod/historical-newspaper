@@ -22,7 +22,7 @@ const OPTIONS: { type: ArticleType; title: string; description: string }[] = [
   {
     type: 'editorial',
     title: 'דבר העורכים',
-    description: 'טור עריכה המחבר בין הכתבות — הדבק את הכתבות שיצרת בשלבים הקודמים',
+    description: 'טור עריכה המחבר בין הכתבות — הדביקו את הכתבות שיצרתם בשלבים הקודמים',
   },
 ]
 

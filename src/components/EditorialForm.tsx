@@ -79,7 +79,7 @@ export default function EditorialForm({ onSubmit, loading, clusterTitle }: Props
 
       <div>
         <label className={labelClass} style={labelStyle}>כתבה ראשית</label>
-        <p className="text-xs mb-2" style={{ color: '#8a6a50' }}>הדבק את הכתבה הראשית שיצרת בשלב הקודם בכלי זה</p>
+        <p className="text-xs mb-2" style={{ color: '#8a6a50' }}>הדביקו את הכתבה הראשית שיצרת בשלב הקודם בכלי זה</p>
         <textarea
           value={mainArticleText}
           onChange={e => setMainArticleText(e.target.value)}
@@ -87,7 +87,7 @@ export default function EditorialForm({ onSubmit, loading, clusterTitle }: Props
           required
           className="w-full px-3 py-2 rounded-xl resize-y font-mono text-sm"
           style={inputStyle}
-          placeholder="הדבק כאן את הכתבה הראשית שנוצרה..."
+          placeholder="הדביקו כאן את הכתבה הראשית שנוצרה..."
         />
       </div>
 
@@ -97,7 +97,7 @@ export default function EditorialForm({ onSubmit, loading, clusterTitle }: Props
             <label className={labelClass} style={{ ...labelStyle, marginBottom: 0 }}>
               כתבות משנה {secondaryArticleTexts.length > 0 && `(${secondaryArticleTexts.length})`}
             </label>
-            <p className="text-xs mt-0.5" style={{ color: '#8a6a50' }}>הדבק את הכתבות המשניות שיצרת בשלבים הקודמים</p>
+            <p className="text-xs mt-0.5" style={{ color: '#8a6a50' }}>הדביקו את הכתבות המשניות שיצרת בשלבים הקודמים</p>
           </div>
           <button
             type="button"
@@ -131,7 +131,7 @@ export default function EditorialForm({ onSubmit, loading, clusterTitle }: Props
               required
               className="w-full px-3 py-2 rounded-xl resize-y font-mono text-sm"
               style={inputStyle}
-              placeholder={`הדבק כאן את כתבת המשנה ${i + 1} שנוצרה...`}
+              placeholder={`הדביקו כאן את כתבת המשנה ${i + 1} שנוצרה...`}
             />
           </div>
         ))}
