@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs'
+import { useAuth, SignInButton, UserButton } from '@clerk/nextjs'
 import ArticleTypeSelector from '@/components/ArticleTypeSelector'
 import NewsForm from '@/components/NewsForm'
 import SecondaryForm from '@/components/SecondaryForm'
@@ -14,6 +14,7 @@ type Stage = 'cluster' | 'select' | 'form' | 'loading' | 'result'
 type ArticleType = FormData['articleType']
 
 export default function Home() {
+  const { isSignedIn } = useAuth()
   const [stage, setStage] = useState<Stage>('cluster')
   const [cluster, setCluster] = useState<Cluster | null>(null)
   const [articleType, setArticleType] = useState<ArticleType | null>(null)
@@ -83,7 +84,7 @@ export default function Home() {
       {/* Auth bar */}
       <div className="flex justify-between items-center px-6 py-3" style={{ background: '#f5f0e8', borderBottom: '1px solid #c9b99a' }}>
         <span style={{ color: '#8a6a50', fontSize: '0.85rem', fontFamily: 'inherit' }}>מחולל העיתון ההיסטורי</span>
-        <SignedOut>
+        {!isSignedIn ? (
           <SignInButton mode="modal">
             <button
               style={{ background: '#8b4513', color: '#fff', border: 'none', borderRadius: '6px', padding: '6px 16px', fontFamily: 'inherit', fontSize: '0.9rem', cursor: 'pointer' }}
@@ -91,10 +92,9 @@ export default function Home() {
               התחבר
             </button>
           </SignInButton>
-        </SignedOut>
-        <SignedIn>
+        ) : (
           <UserButton />
-        </SignedIn>
+        )}
       </div>
 
       <main className="max-w-3xl mx-auto px-4 py-12">
