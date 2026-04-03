@@ -30,6 +30,7 @@ export default function AccessibilityPage() {
             <h2 style={{ fontWeight: 700, fontSize: '1.15rem', color: '#8b4513', marginBottom: '0.5rem' }}>רמת הנגישות</h2>
             <p>
               האתר עומד בחלק מדרישות תקן WCAG 2.1 ברמה AA. אנו פועלים לשיפור מתמיד של הנגישות.
+              האתר משתמש בתוסף הנגישות UserWay המספק כלים מתקדמים להתאמת חווית הגלישה.
             </p>
             <ul style={{ paddingRight: '1.2rem', marginTop: '0.5rem' }} className="space-y-1">
               <li>האתר בנוי בשפה העברית עם תמיכה מלאה בכיוון קריאה מימין לשמאל (RTL)</li>
