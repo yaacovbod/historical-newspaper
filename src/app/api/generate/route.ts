@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@clerk/nextjs/server'
+import { auth, currentUser } from '@clerk/nextjs/server'
 import type { FormData } from '@/lib/types'
 import { buildNewsPrompt, buildSecondaryPrompt, buildEditorialPrompt } from '@/lib/prompts'
 import { redis } from '@/lib/redis'
@@ -15,14 +15,19 @@ export async function POST(request: NextRequest) {
   const { userId } = await auth()
   if (!userId) return NextResponse.json({ error: 'לא מחובר' }, { status: 401 })
 
-  // בדיקת מכסה
-  const countRaw = await redis.get(`articles_count:${userId}`)
-  const count = countRaw ? parseInt(String(countRaw), 10) : 0
-  if (count >= MAX_ARTICLES) {
-    return NextResponse.json(
-      { error: 'הגעת למכסת הכתבות המקסימלית (5 כתבות)' },
-      { status: 403 }
-    )
+  // בדיקת מכסה (לא חל על מנהל)
+  const clerkUser = await currentUser()
+  const isAdmin = clerkUser?.emailAddresses.some(e => e.emailAddress === 'yaacovbod@gmail.com')
+
+  if (!isAdmin) {
+    const countRaw = await redis.get(`articles_count:${userId}`)
+    const count = countRaw ? parseInt(String(countRaw), 10) : 0
+    if (count >= MAX_ARTICLES) {
+      return NextResponse.json(
+        { error: 'הגעת למכסת הכתבות המקסימלית (5 כתבות)' },
+        { status: 403 }
+      )
+    }
   }
 
   let body: FormData
@@ -88,8 +93,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'לא התקבל תוכן מ-Gemini' }, { status: 502 })
   }
 
-  // העלאת המונה רק אחרי יצירה מוצלחת
-  await redis.incr(`articles_count:${userId}`)
+  // העלאת המונה רק אחרי יצירה מוצלחת (לא למנהל)
+  if (!isAdmin) {
+    await redis.incr(`articles_count:${userId}`)
+  }
 
   return NextResponse.json({ result })
 }
