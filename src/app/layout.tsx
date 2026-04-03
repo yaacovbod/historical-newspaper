@@ -43,6 +43,10 @@ export default function RootLayout({
               <a href="/terms" style={{ color: '#8b4513', textDecoration: 'none' }}>
                 תנאי שימוש
               </a>
+              &nbsp;·&nbsp;{' '}
+              <a href="/accessibility" style={{ color: '#8b4513', textDecoration: 'none' }}>
+                הצהרת נגישות
+              </a>
             </p>
             <p style={{ color: '#b0956e', fontSize: '0.72rem', marginTop: '0.3rem', fontFamily: 'inherit' }}>
               התוכן המיוצר נוצר בבינה מלאכותית — האחריות על השימוש בו חלה על המשתמש בלבד
