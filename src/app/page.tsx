@@ -92,6 +92,9 @@ export default function Home() {
       <div className="flex justify-between items-center px-6 py-3" style={{ background: '#f5f0e8', borderBottom: '1px solid #c9b99a' }}>
         <div className="flex items-center gap-4">
           <span style={{ color: '#8a6a50', fontSize: '0.85rem', fontFamily: 'inherit' }}>מחולל העיתון ההיסטורי</span>
+          <Link href="/guide" style={{ color: '#8a6a50', fontSize: '0.85rem', fontFamily: 'inherit', textDecoration: 'none' }}>
+            מדריך
+          </Link>
           {isSignedIn && (
             <Link href="/my-articles" style={{ color: '#8b4513', fontSize: '0.85rem', fontFamily: 'inherit', textDecoration: 'none', fontWeight: 700 }}>
               הכתבות שלי
