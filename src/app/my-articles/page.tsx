@@ -25,13 +25,16 @@ export default async function MyArticlesPage() {
   let kvError = false
 
   try {
-    const timestamps = await redis.lrange(`user:${userId}:articles`, 0, -1) as string[]
+    const timestamps = await redis.lrange(`user:${userId}:articles`, 0, -1)
     if (timestamps.length) {
       const keys = timestamps.map(ts => `article:${userId}:${ts}`)
-      const raw = await redis.mget(...keys) as (Record<string, string> | null)[]
+      const raws = await redis.mget(...keys)
       articles = timestamps
-        .map((ts, i) => ({ id: ts, ...(raw[i] ?? {}) } as Article))
-        .filter(a => a.title)
+        .map((ts, i) => {
+          const parsed = raws[i] ? JSON.parse(raws[i]!) : null
+          return parsed ? { id: ts, ...parsed } as Article : null
+        })
+        .filter((a): a is Article => a !== null && !!a.title)
     }
   } catch {
     kvError = true
@@ -39,7 +42,6 @@ export default async function MyArticlesPage() {
 
   return (
     <div className="min-h-screen" style={{ background: '#fffdf7' }}>
-      {/* Top bar */}
       <div className="flex justify-between items-center px-6 py-3" style={{ background: '#f5f0e8', borderBottom: '1px solid #c9b99a' }}>
         <Link href="/" style={{ color: '#8a6a50', fontSize: '0.85rem', fontFamily: 'inherit', textDecoration: 'none' }}>
           ← חזור לדף הראשי
@@ -55,7 +57,7 @@ export default async function MyArticlesPage() {
         {kvError ? (
           <div className="text-center py-16" style={{ color: '#8a6a50' }}>
             <p style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>שגיאה בטעינת הכתבות</p>
-            <p style={{ fontSize: '0.85rem', color: '#b0956e' }}>ודא ש-UPSTASH_REDIS_REST_URL ו-UPSTASH_REDIS_REST_TOKEN מוגדרים ב-Vercel</p>
+            <p style={{ fontSize: '0.85rem', color: '#b0956e' }}>ודא ש-REDIS_URL מוגדר ב-Vercel</p>
           </div>
         ) : articles.length === 0 ? (
           <div className="text-center py-16" style={{ color: '#8a6a50' }}>

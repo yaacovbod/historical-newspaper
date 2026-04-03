@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     createdAt: new Date().toISOString(),
   }
 
-  await redis.set(key, article)
+  await redis.set(key, JSON.stringify(article))
   await redis.lpush(`user:${userId}:articles`, String(timestamp))
 
   return NextResponse.json({ id: timestamp })
@@ -35,15 +35,18 @@ export async function GET() {
   const { userId } = await auth()
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const timestamps = await redis.lrange(`user:${userId}:articles`, 0, -1) as string[]
+  const timestamps = await redis.lrange(`user:${userId}:articles`, 0, -1)
   if (!timestamps.length) return NextResponse.json({ articles: [] })
 
   const keys = timestamps.map(ts => `article:${userId}:${ts}`)
-  const articles = await redis.mget(...keys) as (Record<string, string> | null)[]
+  const raws = await redis.mget(...keys)
 
   const result = timestamps
-    .map((ts, i) => ({ id: ts, ...(articles[i] ?? {}) }))
-    .filter((a): a is { id: string } & Record<string, string> => 'title' in a && !!a.title)
+    .map((ts, i) => {
+      const parsed = raws[i] ? JSON.parse(raws[i]!) : null
+      return parsed ? { id: ts, ...parsed } : null
+    })
+    .filter(Boolean)
 
   return NextResponse.json({ articles: result })
 }

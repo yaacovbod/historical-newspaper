@@ -23,12 +23,13 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
   if (!userId) redirect('/sign-in')
 
   const { id } = await params
-  const article = await redis.get<Article>(`article:${userId}:${id}`)
-  if (!article) notFound()
+  const raw = await redis.get(`article:${userId}:${id}`)
+  if (!raw) notFound()
+
+  const article: Article = JSON.parse(raw)
 
   return (
     <div className="min-h-screen" style={{ background: '#fffdf7' }}>
-      {/* Top bar */}
       <div className="flex justify-between items-center px-6 py-3" style={{ background: '#f5f0e8', borderBottom: '1px solid #c9b99a' }}>
         <Link href="/my-articles" style={{ color: '#8a6a50', fontSize: '0.85rem', fontFamily: 'inherit', textDecoration: 'none' }}>
           ← חזור לכתבות שלי
@@ -36,7 +37,6 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
       </div>
 
       <main className="max-w-3xl mx-auto px-4 py-10">
-        {/* Meta */}
         <div className="mb-4 flex gap-2 items-center flex-wrap">
           <span
             className="text-xs px-2 py-1 rounded-full"
@@ -52,17 +52,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
           </span>
         </div>
 
-        {/* Content */}
         <div
           className="rounded-xl p-6"
-          style={{
-            background: '#f5f0e8',
-            border: '1px solid #d4c9b0',
-            color: '#2c1810',
-            lineHeight: '1.9',
-            direction: 'rtl',
-            textAlign: 'right',
-          }}
+          style={{ background: '#f5f0e8', border: '1px solid #d4c9b0', color: '#2c1810', lineHeight: '1.9', direction: 'rtl', textAlign: 'right' }}
         >
           <ArticleMarkdown content={article.content} />
         </div>
