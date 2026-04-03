@@ -31,6 +31,9 @@ export default function RootLayout({
   return (
     <ClerkProvider localization={localization}>
       <html lang="he" dir="rtl">
+        <head>
+          <script src="https://cdn.userway.org/widget.js" data-account="Pbwv4T4to1" async />
+        </head>
         <body className={`${suezOne.className} min-h-screen flex flex-col`}>
           <div className="flex-1">{children}</div>
           <footer style={{ background: '#f5f0e8', borderTop: '1px solid #c9b99a', padding: '1.2rem 1.5rem', textAlign: 'center' }}>
