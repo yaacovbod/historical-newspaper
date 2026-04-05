@@ -1,14 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #f5f0e8;
-  --card: #fffdf7;
-  --border: #c9b99a;
-  --text: #2c1810;
-  --text-muted: #5c3d1e;
-  --text-light: #8a6a50;
-  --btn: #8b4513;
-  --input-bg: #faf7f2;
+  --bg: #F8EDD4;
+  --card: #FFFAEE;
+  --border: #D4A843;
+  --text: #2C1A00;
+  --text-muted: #6B4510;
+  --text-light: #9B7230;
+  --btn: #C8860A;
+  --btn-hover: #A86E08;
+  --gold: #D4A017;
+  --input-bg: #FDF7E4;
 }
 
 body {

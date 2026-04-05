@@ -89,14 +89,14 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       {/* Auth bar */}
-      <div className="flex justify-between items-center px-6 py-3" style={{ background: '#f5f0e8', borderBottom: '1px solid #c9b99a' }}>
+      <div className="flex justify-between items-center px-6 py-3" style={{ background: '#F8EDD4', borderBottom: '1px solid #D4A843' }}>
         <div className="flex items-center gap-4">
-          <span style={{ color: '#8a6a50', fontSize: '0.85rem', fontFamily: 'inherit' }}>מחולל העיתון ההיסטורי</span>
-          <Link href="/guide" style={{ color: '#8a6a50', fontSize: '0.85rem', fontFamily: 'inherit', textDecoration: 'none' }}>
+          <span style={{ color: '#9B7230', fontSize: '0.85rem', fontFamily: 'inherit' }}>מחולל העיתון ההיסטורי</span>
+          <Link href="/guide" style={{ color: '#9B7230', fontSize: '0.85rem', fontFamily: 'inherit', textDecoration: 'none' }}>
             מדריך
           </Link>
           {isSignedIn && (
-            <Link href="/my-articles" style={{ color: '#8b4513', fontSize: '0.85rem', fontFamily: 'inherit', textDecoration: 'none', fontWeight: 700 }}>
+            <Link href="/my-articles" style={{ color: '#C8860A', fontSize: '0.85rem', fontFamily: 'inherit', textDecoration: 'none', fontWeight: 700 }}>
               הכתבות שלי
             </Link>
           )}
@@ -104,7 +104,7 @@ export default function Home() {
         {!isSignedIn ? (
           <SignInButton mode="modal">
             <button
-              style={{ background: '#8b4513', color: '#fff', border: 'none', borderRadius: '6px', padding: '6px 16px', fontFamily: 'inherit', fontSize: '0.9rem', cursor: 'pointer' }}
+              style={{ background: '#C8860A', color: '#fff', border: 'none', borderRadius: '6px', padding: '6px 16px', fontFamily: 'inherit', fontSize: '0.9rem', cursor: 'pointer' }}
             >
               התחבר
             </button>
@@ -118,32 +118,32 @@ export default function Home() {
 
         {/* Header */}
         <div className="mb-10 text-center">
-          <div className="mb-2 text-xs tracking-widest uppercase" style={{ color: '#8a6a50', fontFamily: 'inherit', letterSpacing: '0.2em' }}>
+          <div className="mb-2 text-xs tracking-widest uppercase" style={{ color: '#9B7230', fontFamily: 'inherit', letterSpacing: '0.2em' }}>
             תוכנית הבגרויות הגמישה
           </div>
-          <h1 style={{ fontFamily: 'inherit', fontSize: '2.4rem', fontWeight: 800, color: '#2c1810', lineHeight: 1.2 }}>
+          <h1 style={{ fontFamily: 'inherit', fontSize: '2.4rem', fontWeight: 800, color: '#2C1A00', lineHeight: 1.2 }}>
             מחולל העיתון ההיסטורי
           </h1>
-          <div style={{ width: '60px', height: '2px', background: '#8b4513', margin: '0.75rem auto' }} />
-          <p style={{ color: '#5c3d1e', fontFamily: 'inherit', fontSize: '1.05rem' }}>
+          <div style={{ width: '60px', height: '2px', background: '#D4A017', margin: '0.75rem auto' }} />
+          <p style={{ color: '#6B4510', fontFamily: 'inherit', fontSize: '1.05rem' }}>
             כלי לתלמידי בגרות ליצירת כתבות עיתון היסטוריות
           </p>
         </div>
 
         {/* Content card */}
-        <div className="rounded-xl p-8" style={{ background: '#fffdf7', border: '1px solid #c9b99a', boxShadow: '0 2px 12px rgba(44,24,16,0.07)' }}>
+        <div className="rounded-xl p-8" style={{ background: '#FFFAEE', border: '1px solid #D4A843', boxShadow: '0 2px 12px rgba(44,26,0,0.10)' }}>
 
           {/* בחירת אשכול */}
           {stage === 'cluster' && (
             <div className="space-y-6">
-              <h2 style={{ fontFamily: 'inherit', fontSize: '1.4rem', color: '#2c1810' }}>בחר אשכול</h2>
+              <h2 style={{ fontFamily: 'inherit', fontSize: '1.4rem', color: '#2C1A00' }}>בחר אשכול</h2>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {CLUSTERS.map(c => (
                   <button
                     key={c.id}
                     onClick={() => handleSelectCluster(c)}
                     className="rounded-xl p-6 text-right transition-all hover:brightness-95 active:scale-95"
-                    style={{ background: '#8b4513', border: 'none', boxShadow: '0 2px 8px rgba(139,69,19,0.3)' }}
+                    style={{ background: '#C8860A', border: 'none', boxShadow: '0 2px 8px rgba(200,134,10,0.35)' }}
                   >
                     <div style={{ fontFamily: 'inherit', fontWeight: 700, color: '#fff', fontSize: '1.1rem', marginBottom: '0.4rem' }}>{c.title}</div>
                     <div style={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.9rem', fontFamily: 'inherit' }}>{c.subtitle}</div>
@@ -158,12 +158,12 @@ export default function Home() {
               <button
                 onClick={() => setStage('cluster')}
                 className="text-sm mb-4 block hover:underline"
-                style={{ color: '#8b4513', fontFamily: 'inherit' }}
+                style={{ color: '#C8860A', fontFamily: 'inherit' }}
               >
                 ← חזור לבחירת אשכול
               </button>
-              <div className="mb-6 px-3 py-2 rounded-lg text-sm" style={{ background: '#f5f0e8', border: '1px solid #c9b99a', color: '#5c3d1e' }}>
-                אשכול: <span style={{ fontWeight: 700, color: '#2c1810', fontFamily: 'inherit' }}>{cluster.title}</span>
+              <div className="mb-6 px-3 py-2 rounded-lg text-sm" style={{ background: '#F8EDD4', border: '1px solid #D4A843', color: '#6B4510' }}>
+                אשכול: <span style={{ fontWeight: 700, color: '#2C1A00', fontFamily: 'inherit' }}>{cluster.title}</span>
               </div>
               <ArticleTypeSelector onSelect={handleSelectType} />
             </div>
@@ -174,7 +174,7 @@ export default function Home() {
               <button
                 onClick={() => setStage('select')}
                 className="text-sm mb-6 block hover:underline"
-                style={{ color: '#8b4513', fontFamily: 'inherit' }}
+                style={{ color: '#C8860A', fontFamily: 'inherit' }}
               >
                 ← חזור לבחירת סוג
               </button>
@@ -199,9 +199,9 @@ export default function Home() {
             <div className="text-center py-16">
               <div
                 className="inline-block w-10 h-10 rounded-full animate-spin mb-4"
-                style={{ border: '3px solid #c9b99a', borderTopColor: '#8b4513' }}
+                style={{ border: '3px solid #D4A843', borderTopColor: '#C8860A' }}
               />
-              <p style={{ color: '#5c3d1e', fontFamily: 'inherit', fontSize: '1.1rem' }}>מייצר כתבה...</p>
+              <p style={{ color: '#6B4510', fontFamily: 'inherit', fontSize: '1.1rem' }}>מייצר כתבה...</p>
             </div>
           )}
 
