@@ -1,36 +1,129 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# מחולל העיתון ההיסטורי
 
-## Getting Started
+כלי עזר לתלמידי בגרות ליצירת כתבות היסטוריות בסגנון עיתון. התלמיד בוחר נושא מהתכנית, מזין פרטים, והמערכת מייצרת כתבה בעברית.
 
-First, run the development server:
+---
+
+## מה המורה צריך לעשות לפני שמפעיל אתר לתלמידים שלו
+
+### שלב 1: פתיחת חשבונות ושירותים (חינם / כמעט חינם)
+
+יש 3 שירותים חיצוניים שהמערכת מסתמכת עליהם:
+
+#### א. Clerk (אימות משתמשים)
+- נכנסים ל-[clerk.com](https://clerk.com) ופותחים חשבון חינמי
+- יוצרים Application חדש
+- מעתיקים את המפתחות:
+  - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
+  - `CLERK_SECRET_KEY`
+- הפלן החינמי מספיק לכיתה רגילה (עד 10,000 משתמשים)
+
+#### ב. Google Gemini API (הבינה המלאכותית שמייצרת את הכתבות)
+- נכנסים ל-[aistudio.google.com](https://aistudio.google.com) עם חשבון Google
+- יוצרים API Key
+- מעתיקים אותו: `GEMINI_API_KEY`
+- יש מכסה חינמית נדיבה. כיתה רגילה כנראה תישאר בחינם
+
+#### ג. Redis (שמירת הכתבות של התלמידים)
+- האפשרות הפשוטה ביותר: פותחים חשבון ב-[Upstash](https://upstash.com) (פלן חינמי)
+- יוצרים Database מסוג Redis
+- מעתיקים את ה-`REDIS_URL` (לחצן "Connect" ואז "ioredis")
+
+---
+
+### שלב 2: התאמת התכנים לכיתה שלך
+
+כל התכנים הלימודיים נמצאים בתיקייה `src/lib/`:
+
+**`clusters.ts`** מגדיר את 3 הנושאים הראשיים שהתלמיד בוחר. לכל נושא יש שם, תיאור ורשימת מושגים.
+
+**`concepts.ts`, `concepts-hakamat-medina.ts`, `concepts-decolonization.ts`** הן רשימות המושגים לכל נושא.
+
+כדי להתאים לתכנית הלימודים שלך:
+1. ערוך את `clusters.ts` ושנה את שמות הנושאים והתיאורים
+2. ערוך את קבצי המושגים והחלף את המושגים ברשימה שלך
+3. אפשר לשנות את כותרת האתר בקובץ `src/app/layout.tsx`
+
+---
+
+### שלב 3: הגדרת מגבלות שימוש
+
+בקובץ `src/lib/redis.ts` (ובנתיב `/api/generate`) יש מגבלה של **5 כתבות למשתמש**.
+ניתן לשנות את המספר הזה לפי הצורך.
+
+כדי לתת לעצמך (המורה) גישה ללא מגבלה, עורכים את הנתיב `src/app/api/generate/route.ts` ומחליפים את כתובת המייל שמוגדרת שם לכתובת שלך.
+
+---
+
+### שלב 4: העלאה לאינטרנט (Vercel)
+
+Vercel היא הפלטפורמה הכי פשוטה לאירוח Next.js, יש פלן חינמי שמתאים לשימוש בכיתה.
+
+1. מעלים את הקוד ל-GitHub (ריפו פרטי או ציבורי)
+2. נכנסים ל-[vercel.com](https://vercel.com) ומחברים את חשבון GitHub
+3. לוחצים "Add New Project" ובוחרים את הריפו
+4. מוסיפים את משתני הסביבה (מהשלב הראשון):
+   ```
+   GEMINI_API_KEY
+   REDIS_URL
+   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+   CLERK_SECRET_KEY
+   ```
+5. לוחצים Deploy
+
+Vercel יתן לאתר כתובת אינטרנט קבועה שאפשר לשלוח לתלמידים.
+
+---
+
+### שלב 5: ניהול גישה לאתר (קוד גישה)
+
+המערכת תומכת בשני מצבי פעולה:
+
+**מצב פתוח** (ללא קוד גישה) — כל מי שנרשם נכנס אוטומטית. מתאים לשבוע היכרות עם מורים אחרים.
+
+**מצב מוגבל** (עם קוד גישה) — משתמשים חדשים חייבים להכניס קוד לפני שנכנסים. מי שנרשם לפני הגדרת הקוד ממשיך להשתמש בלי הפרעה.
+
+כדי להפעיל קוד גישה, מוסיפים ב-Vercel תחת Environment Variables:
+```
+STUDENT_ACCESS_CODE = הקוד_שלך
+```
+ואז Redeploy. תלמידים חדשים יראו דף "הכנס קוד גישה" בעת ההרשמה. הקוד ניתן לשינוי בכל עת.
+
+---
+
+## הרצה מקומית (למפתחים)
+
+```bash
+npm install
+```
+
+יוצרים קובץ `.env.local` בתיקייה הראשית עם ארבעת המשתנים מלמעלה, ואז:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+פותחים [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## מבנה הפרויקט
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/
+  app/
+    page.tsx          # עמוד ראשי - מחולל הכתבות
+    my-articles/      # עמוד הכתבות השמורות של התלמיד
+    guide/            # מדריך שימוש
+    api/
+      generate/       # יצירת כתבה דרך Gemini
+      refine/         # שיפור כתבה קיימת
+      articles/       # שמירה ושליפה מ-Redis
+  lib/
+    clusters.ts       # הגדרת הנושאים (כאן מתאימים לתכנית)
+    concepts*.ts      # רשימות מושגים לכל נושא
+    prompts.ts        # ההנחיות שנשלחות ל-AI
+    redis.ts          # שכבת הנתונים
+    types.ts          # הגדרות טיפוסים
+  proxy.ts            # הגנת נתיבים וקוד גישה (Clerk)
+```
