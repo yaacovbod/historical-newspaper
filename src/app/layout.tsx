@@ -8,7 +8,7 @@ const suezOne = Suez_One({ subsets: ["hebrew"], weight: "400" });
 
 export const metadata: Metadata = {
   title: "מחולל העיתון ההיסטורי",
-  description: "כלי לתלמידי בגרות ליצירת כתבות עיתון היסטוריות",
+  description: "כלי לתלמידי הבגרות הגמישה ליצירת כתבות עיתון היסטוריות",
 };
 
 const localization = {

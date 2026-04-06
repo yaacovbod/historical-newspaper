@@ -126,7 +126,7 @@ export default function Home() {
           </h1>
           <div style={{ width: '60px', height: '2px', background: '#D4A017', margin: '0.75rem auto' }} />
           <p style={{ color: '#6B4510', fontFamily: 'inherit', fontSize: '1.05rem' }}>
-            כלי לתלמידי בגרות ליצירת כתבות עיתון היסטוריות
+            כלי לתלמידי הבגרות הגמישה ליצירת כתבות עיתון היסטוריות
           </p>
         </div>
 
