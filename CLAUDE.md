@@ -50,7 +50,7 @@ Redis via `ioredis` (singleton pattern on `globalThis`). Two data structures per
 - `user:{userId}:articles` — list of timestamps (used for ordering)
 - `articles_count:{userId}` — generation counter (max 5 per user, enforced in `/api/generate`)
 
-The admin email (`yaacovbod@gmail.com`) bypasses the 5-article quota.
+The admin email (configured in `src/app/api/generate/route.ts`) bypasses the 5-article quota. Replace with your own email address.
 
 ### Auth (`src/middleware.ts`)
 
