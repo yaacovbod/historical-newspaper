@@ -28,7 +28,7 @@ export const CLUSTERS: Cluster[] = [
   {
     id: 'decolonization',
     title: 'סוגיות נבחרות בתולדות מדינת ישראל',
-    subtitle: 'המלחמה הקרה, עלייה וחברה ישראלית',
+    subtitle: 'דה-קולוניאליזציה, עליות ומלחמות ישראל',
     gradient: 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
     concepts: DECOLONIZATION_CONCEPTS,
   },
