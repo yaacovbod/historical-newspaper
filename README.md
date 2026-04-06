@@ -97,7 +97,13 @@ STUDENT_ACCESS_CODE = הקוד_שלך
 npm install
 ```
 
-יוצרים קובץ `.env.local` בתיקייה הראשית עם ארבעת המשתנים מלמעלה, ואז:
+מעתיקים את קובץ הדוגמה ומוסיפים את הערכים:
+
+```bash
+cp .env.example .env.local
+```
+
+פותחים את `.env.local` וממלאים את ארבעת המשתנים, ואז:
 
 ```bash
 npm run dev
