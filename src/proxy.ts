@@ -11,8 +11,9 @@ export default clerkMiddleware(async (auth, request) => {
 
   if (isAccessRoute(request)) return
 
-  const { sessionClaims } = await auth()
-  const accessVerified = (sessionClaims?.publicMetadata as { accessVerified?: boolean })?.accessVerified
+  const { userId } = await auth()
+  const cookieValue = request.cookies.get('access_verified')?.value
+  const accessVerified = cookieValue === userId
 
   if (!accessVerified) {
     return NextResponse.redirect(new URL('/access', request.url))

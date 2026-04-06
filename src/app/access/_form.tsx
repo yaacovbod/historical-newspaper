@@ -1,13 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { useSession } from '@clerk/nextjs'
 
 export default function AccessForm() {
   const [code, setCode] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const { session } = useSession()
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -21,7 +19,6 @@ export default function AccessForm() {
     })
 
     if (res.ok) {
-      await session?.reload()
       window.location.href = '/'
     } else {
       const data = await res.json()
