@@ -7,12 +7,15 @@ interface Props {
   text: string
   onReset: () => void
   onRefine: (note: string) => Promise<void>
+  onSave: () => Promise<void>
   refining: boolean
 }
 
-export default function OutputDisplay({ text, onReset, onRefine, refining }: Props) {
+export default function OutputDisplay({ text, onReset, onRefine, onSave, refining }: Props) {
   const [copied, setCopied] = useState(false)
   const [refinementNote, setRefinementNote] = useState('')
+  const [saved, setSaved] = useState(false)
+  const [saving, setSaving] = useState(false)
 
   async function handleCopy() {
     await navigator.clipboard.writeText(text)
@@ -24,11 +27,27 @@ export default function OutputDisplay({ text, onReset, onRefine, refining }: Pro
     if (!refinementNote.trim()) return
     await onRefine(refinementNote)
     setRefinementNote('')
+    setSaved(false)
+  }
+
+  async function handleSave() {
+    setSaving(true)
+    await onSave()
+    setSaving(false)
+    setSaved(true)
   }
 
   return (
     <div className="space-y-4">
-      <div className="flex gap-3">
+      <div className="flex gap-3 flex-wrap">
+        <button
+          onClick={handleSave}
+          disabled={saving || saved}
+          className="px-4 py-2 rounded font-medium transition-opacity hover:opacity-80 disabled:opacity-60"
+          style={{ background: saved ? '#5a7a3a' : '#C8860A', color: '#fff' }}
+        >
+          {saving ? 'שומר...' : saved ? 'נשמר!' : 'שמור כתבה'}
+        </button>
         <button
           onClick={handleCopy}
           className="px-4 py-2 rounded font-medium transition-opacity hover:opacity-80"

@@ -51,16 +51,18 @@ export default function Home() {
       }
       setResult(json.result)
       setStage('result')
-      // שמירה ב-KV בצורה שקטה
-      fetch('/api/articles', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: json.result, articleType: data.articleType, clusterTitle: cluster?.title }),
-      }).catch(() => {})
     } catch {
       setError('שגיאת רשת — בדוק את החיבור ונסה שוב')
       setStage('form')
     }
+  }
+
+  async function handleSave() {
+    await fetch('/api/articles', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content: result, articleType, clusterTitle: cluster?.title }),
+    }).catch(() => {})
   }
 
   async function handleRefine(note: string) {
@@ -206,7 +208,7 @@ export default function Home() {
           )}
 
           {stage === 'result' && (
-            <OutputDisplay text={result} onReset={handleReset} onRefine={handleRefine} refining={refining} />
+            <OutputDisplay text={result} onReset={handleReset} onRefine={handleRefine} onSave={handleSave} refining={refining} />
           )}
         </div>
       </main>
