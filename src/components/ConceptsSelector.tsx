@@ -44,7 +44,7 @@ export default function ConceptsSelector({ selected, onChange, concepts: concept
     <div className="space-y-3">
       <div className="flex items-center justify-between mb-1">
         <span style={{ fontSize: '0.8rem', color: isMaxReached ? '#8b4513' : '#8a6a50', fontWeight: isMaxReached ? 700 : 400 }}>
-          {isMaxReached ? 'הגעת למקסימום מושגים (4/4)' : `${selected.length}/4 מושגים נבחרו`}
+          {isMaxReached ? 'הגעת למקסימום (4/4)' : `נבחרו ${selected.length} מתוך עד 4 מושגים`}
         </span>
       </div>
       <div className="flex flex-wrap gap-2">
