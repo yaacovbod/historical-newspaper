@@ -108,7 +108,7 @@ export default function SecondaryForm({ onSubmit, loading, concepts, clusterTitl
 
       <div>
         <label className={labelClass} style={labelStyle}>מקורות</label>
-        <SourcesList sources={sources} onChange={setSources} />
+        <SourcesList sources={sources} onChange={setSources} maxSources={2} />
       </div>
 
       <div>

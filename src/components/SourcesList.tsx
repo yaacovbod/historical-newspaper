@@ -3,9 +3,10 @@
 interface Props {
   sources: string[]
   onChange: (sources: string[]) => void
+  maxSources?: number
 }
 
-export default function SourcesList({ sources, onChange }: Props) {
+export default function SourcesList({ sources, onChange, maxSources = 4 }: Props) {
   function update(index: number, value: string) {
     const next = [...sources]
     next[index] = value
@@ -13,6 +14,7 @@ export default function SourcesList({ sources, onChange }: Props) {
   }
 
   function add() {
+    if (sources.length >= maxSources) return
     onChange([...sources, ''])
   }
 
@@ -51,14 +53,19 @@ export default function SourcesList({ sources, onChange }: Props) {
           )}
         </div>
       ))}
-      <button
-        type="button"
-        onClick={add}
-        className="text-sm px-4 py-1.5 rounded-xl transition-opacity hover:opacity-80"
-        style={{ background: '#f5f0e8', color: '#8b4513', border: '1px solid #c9b99a' }}
-      >
-        + הוסף מקור
-      </button>
+      {sources.length < maxSources && (
+        <button
+          type="button"
+          onClick={add}
+          className="text-sm px-4 py-1.5 rounded-xl transition-opacity hover:opacity-80"
+          style={{ background: '#f5f0e8', color: '#8b4513', border: '1px solid #c9b99a' }}
+        >
+          + הוסף מקור ({sources.length}/{maxSources})
+        </button>
+      )}
+      {sources.length >= maxSources && (
+        <p className="text-xs" style={{ color: '#8a6a50' }}>הגעת למקסימום {maxSources} מקורות</p>
+      )}
     </div>
   )
 }
