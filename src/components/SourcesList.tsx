@@ -29,13 +29,13 @@ export default function SourcesList({ sources, onChange }: Props) {
               value={src}
               onChange={e => update(i, e.target.value)}
               rows={3}
-              maxLength={2500}
+              maxLength={4000}
               className="w-full px-3 py-2 resize-y text-sm rounded-xl"
               style={{ background: '#faf7f2', border: '1px solid #c9b99a', color: '#2c1810' }}
               placeholder={`מקור ${i + 1} — שם מחבר, שנה, ציטוט...`}
             />
-            <div className="text-left text-xs mt-0.5" style={{ color: src.length > 2200 ? '#c0392b' : '#8a6a50' }}>
-              {src.length}/2500
+            <div className="text-left text-xs mt-0.5" style={{ color: src.length > 3500 ? '#c0392b' : '#8a6a50' }}>
+              {src.length}/4000
             </div>
           </div>
           {sources.length > 1 && (
