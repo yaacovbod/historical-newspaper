@@ -20,7 +20,11 @@ export default function EditorialForm({ onSubmit, loading, clusterTitle }: Props
   const [secondaryArticleTexts, setSecondaryArticleTexts] = useState<string[]>([''])
   const [notes, setNotes] = useState('')
 
+  const MAX_SECONDARY = 4
+  const MAX_ARTICLE_CHARS = 1500
+
   function addSecondary() {
+    if (secondaryArticleTexts.length >= MAX_SECONDARY) return
     setSecondaryArticleTexts(prev => [...prev, ''])
   }
 
@@ -31,7 +35,7 @@ export default function EditorialForm({ onSubmit, loading, clusterTitle }: Props
   function updateSecondary(index: number, value: string) {
     setSecondaryArticleTexts(prev => {
       const next = [...prev]
-      next[index] = value
+      next[index] = value.slice(0, MAX_ARTICLE_CHARS)
       return next
     })
   }
@@ -82,13 +86,16 @@ export default function EditorialForm({ onSubmit, loading, clusterTitle }: Props
         <p className="text-xs mb-2" style={{ color: '#8a6a50' }}>הדביקו את הכתבה הראשית שיצרת בשלב הקודם בכלי זה</p>
         <textarea
           value={mainArticleText}
-          onChange={e => setMainArticleText(e.target.value)}
+          onChange={e => setMainArticleText(e.target.value.slice(0, 1500))}
           rows={8}
           required
           className="w-full px-3 py-2 rounded-xl resize-y font-mono text-sm"
           style={inputStyle}
           placeholder="הדביקו כאן את הכתבה הראשית שנוצרה..."
         />
+        <div className="text-left text-xs mt-0.5" style={{ color: mainArticleText.length > 1300 ? '#c0392b' : '#8a6a50' }}>
+          {mainArticleText.length}/1500
+        </div>
       </div>
 
       <div className="space-y-4">
@@ -99,14 +106,16 @@ export default function EditorialForm({ onSubmit, loading, clusterTitle }: Props
             </label>
             <p className="text-xs mt-0.5" style={{ color: '#8a6a50' }}>הדביקו את הכתבות המשניות שיצרת בשלבים הקודמים</p>
           </div>
-          <button
-            type="button"
-            onClick={addSecondary}
-            className="px-4 py-1.5 rounded-lg text-sm font-medium transition-opacity hover:opacity-80"
-            style={{ background: '#8b4513', color: '#fff' }}
-          >
-            + הוסף כתבת משנה
-          </button>
+          {secondaryArticleTexts.length < MAX_SECONDARY && (
+            <button
+              type="button"
+              onClick={addSecondary}
+              className="px-4 py-1.5 rounded-lg text-sm font-medium transition-opacity hover:opacity-80"
+              style={{ background: '#8b4513', color: '#fff' }}
+            >
+              + הוסף כתבת משנה ({secondaryArticleTexts.length}/{MAX_SECONDARY})
+            </button>
+          )}
         </div>
         {secondaryArticleTexts.length === 0 && (
           <p className="text-sm" style={{ color: '#8a6a50' }}>לחץ על הכפתור להוספת כתבת משנה</p>
@@ -133,6 +142,9 @@ export default function EditorialForm({ onSubmit, loading, clusterTitle }: Props
               style={inputStyle}
               placeholder={`הדביקו כאן את כתבת המשנה ${i + 1} שנוצרה...`}
             />
+            <div className="text-left text-xs mt-0.5" style={{ color: text.length > 1300 ? '#c0392b' : '#8a6a50' }}>
+              {text.length}/1500
+            </div>
           </div>
         ))}
       </div>
