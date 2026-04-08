@@ -58,7 +58,7 @@ export default function NewsForm({ onSubmit, loading, concepts, clusterTitle }: 
 
       <div>
         <label className={labelClass} style={labelStyle}>מקורות</label>
-        <SourcesList sources={sources} onChange={setSources} />
+        <SourcesList sources={sources} onChange={setSources} maxTotalChars={6000} />
       </div>
 
       <div>
