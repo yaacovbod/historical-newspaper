@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth, currentUser } from '@clerk/nextjs/server'
+import Anthropic from '@anthropic-ai/sdk'
 import type { FormData } from '@/lib/types'
 import { buildNewsPrompt, buildSecondaryPrompt, buildEditorialPrompt } from '@/lib/prompts'
 import { redis } from '@/lib/redis'
@@ -8,9 +9,9 @@ const MAX_ARTICLES = 5
 const ADMIN_EMAIL = 'yaacovbod@gmail.com'
 
 export async function POST(request: NextRequest) {
-  const apiKey = process.env.GEMINI_API_KEY
+  const apiKey = process.env.ANTHROPIC_API_KEY
   if (!apiKey) {
-    return NextResponse.json({ error: 'GEMINI_API_KEY לא מוגדר' }, { status: 500 })
+    return NextResponse.json({ error: 'ANTHROPIC_API_KEY לא מוגדר' }, { status: 500 })
   }
 
   const { userId } = await auth()
@@ -54,43 +55,23 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'שגיאה בבניית הפרומפט' }, { status: 500 })
   }
 
-  const geminiPayload = {
-    system_instruction: { parts: [{ text: system }] },
-    contents: [{ role: 'user', parts: [{ text: user }] }],
-  }
+  const client = new Anthropic({ apiKey })
 
-  let geminiResponse: Response
+  let result: string
   try {
-    geminiResponse = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(geminiPayload),
-      }
-    )
+    const message = await client.messages.create({
+      model: 'claude-sonnet-4-5',
+      max_tokens: 4096,
+      system,
+      messages: [{ role: 'user', content: user }],
+    })
+    result = (message.content[0] as { type: string; text: string }).text
   } catch {
-    return NextResponse.json({ error: 'שגיאת רשת בפנייה ל-Gemini' }, { status: 502 })
+    return NextResponse.json({ error: 'שגיאה בפנייה ל-Claude' }, { status: 502 })
   }
 
-  if (!geminiResponse.ok) {
-    const errorText = await geminiResponse.text().catch(() => '')
-    return NextResponse.json(
-      { error: `Gemini החזיר שגיאה ${geminiResponse.status}: ${errorText}` },
-      { status: 502 }
-    )
-  }
-
-  let geminiData: { candidates?: { content?: { parts?: { text?: string }[] } }[] }
-  try {
-    geminiData = await geminiResponse.json()
-  } catch {
-    return NextResponse.json({ error: 'תגובה לא תקינה מ-Gemini' }, { status: 502 })
-  }
-
-  const result = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text
   if (!result) {
-    return NextResponse.json({ error: 'לא התקבל תוכן מ-Gemini' }, { status: 502 })
+    return NextResponse.json({ error: 'לא התקבל תוכן מ-Claude' }, { status: 502 })
   }
 
   if (!isAdmin) {
