@@ -4,12 +4,18 @@ interface Props {
   sources: string[]
   onChange: (sources: string[]) => void
   maxSources?: number
+  maxTotalChars?: number
 }
 
-export default function SourcesList({ sources, onChange, maxSources = 4 }: Props) {
+export default function SourcesList({ sources, onChange, maxSources = 4, maxTotalChars = 2500 }: Props) {
+  const totalChars = sources.reduce((sum, s) => sum + s.length, 0)
+  const remaining = maxTotalChars - totalChars
+
   function update(index: number, value: string) {
+    const otherChars = sources.reduce((sum, s, i) => i === index ? sum : sum + s.length, 0)
+    const allowed = maxTotalChars - otherChars
     const next = [...sources]
-    next[index] = value
+    next[index] = value.slice(0, allowed)
     onChange(next)
   }
 
@@ -31,14 +37,10 @@ export default function SourcesList({ sources, onChange, maxSources = 4 }: Props
               value={src}
               onChange={e => update(i, e.target.value)}
               rows={3}
-              maxLength={4000}
               className="w-full px-3 py-2 resize-y text-sm rounded-xl"
               style={{ background: '#faf7f2', border: '1px solid #c9b99a', color: '#2c1810' }}
               placeholder={`מקור ${i + 1} — שם מחבר, שנה, ציטוט...`}
             />
-            <div className="text-left text-xs mt-0.5" style={{ color: src.length > 3500 ? '#c0392b' : '#8a6a50' }}>
-              {src.length}/4000
-            </div>
           </div>
           {sources.length > 1 && (
             <button
@@ -53,19 +55,24 @@ export default function SourcesList({ sources, onChange, maxSources = 4 }: Props
           )}
         </div>
       ))}
-      {sources.length < maxSources && (
-        <button
-          type="button"
-          onClick={add}
-          className="text-sm px-4 py-1.5 rounded-xl transition-opacity hover:opacity-80"
-          style={{ background: '#f5f0e8', color: '#8b4513', border: '1px solid #c9b99a' }}
-        >
-          + הוסף מקור ({sources.length}/{maxSources})
-        </button>
-      )}
-      {sources.length >= maxSources && (
-        <p className="text-xs" style={{ color: '#8a6a50' }}>הגעת למקסימום {maxSources} מקורות</p>
-      )}
+      <div className="flex items-center justify-between">
+        {sources.length < maxSources ? (
+          <button
+            type="button"
+            onClick={add}
+            disabled={remaining <= 0}
+            className="text-sm px-4 py-1.5 rounded-xl transition-opacity hover:opacity-80 disabled:opacity-40"
+            style={{ background: '#f5f0e8', color: '#8b4513', border: '1px solid #c9b99a' }}
+          >
+            + הוסף מקור ({sources.length}/{maxSources})
+          </button>
+        ) : (
+          <p className="text-xs" style={{ color: '#8a6a50' }}>הגעת למקסימום {maxSources} מקורות</p>
+        )}
+        <span className="text-xs" style={{ color: remaining < 200 ? '#c0392b' : '#8a6a50' }}>
+          {totalChars}/{maxTotalChars} תווים
+        </span>
+      </div>
     </div>
   )
 }
