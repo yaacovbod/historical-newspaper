@@ -117,13 +117,13 @@ export default function SecondaryForm({ onSubmit, loading, concepts, clusterTitl
           value={notes}
           onChange={e => setNotes(e.target.value)}
           rows={3}
-          maxLength={500}
+          maxLength={250}
           className="w-full px-3 py-2 rounded-xl text-sm resize-y"
           style={inputStyle}
           placeholder="הוראות מיוחדות, הדגשות, בקשות ספציפיות..."
         />
-        <div className="text-left text-xs mt-0.5" style={{ color: notes.length > 400 ? '#c0392b' : '#8a6a50' }}>
-          {notes.length}/500
+        <div className="text-left text-xs mt-0.5" style={{ color: notes.length > 200 ? '#c0392b' : '#8a6a50' }}>
+          {notes.length}/250
         </div>
       </div>
 
