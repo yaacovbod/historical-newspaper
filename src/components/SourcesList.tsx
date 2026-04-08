@@ -7,7 +7,7 @@ interface Props {
   maxTotalChars?: number
 }
 
-export default function SourcesList({ sources, onChange, maxSources = 4, maxTotalChars = 2500 }: Props) {
+export default function SourcesList({ sources, onChange, maxSources = 4, maxTotalChars = 5000 }: Props) {
   const totalChars = sources.reduce((sum, s) => sum + s.length, 0)
   const remaining = maxTotalChars - totalChars
 
@@ -69,7 +69,7 @@ export default function SourcesList({ sources, onChange, maxSources = 4, maxTota
         ) : (
           <p className="text-xs" style={{ color: '#8a6a50' }}>הגעת למקסימום {maxSources} מקורות</p>
         )}
-        <span className="text-xs" style={{ color: remaining < 200 ? '#c0392b' : '#8a6a50' }}>
+        <span className="text-xs" style={{ color: remaining < 400 ? '#c0392b' : '#8a6a50' }}>
           {totalChars}/{maxTotalChars} תווים
         </span>
       </div>
