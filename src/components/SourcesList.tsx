@@ -24,14 +24,20 @@ export default function SourcesList({ sources, onChange }: Props) {
     <div className="space-y-3">
       {sources.map((src, i) => (
         <div key={i} className="flex gap-2 items-start">
-          <textarea
-            value={src}
-            onChange={e => update(i, e.target.value)}
-            rows={3}
-            className="flex-1 px-3 py-2 resize-y text-sm rounded-xl"
-            style={{ background: '#faf7f2', border: '1px solid #c9b99a', color: '#2c1810' }}
-            placeholder={`מקור ${i + 1} — שם מחבר, שנה, ציטוט...`}
-          />
+          <div className="flex-1">
+            <textarea
+              value={src}
+              onChange={e => update(i, e.target.value)}
+              rows={3}
+              maxLength={1500}
+              className="w-full px-3 py-2 resize-y text-sm rounded-xl"
+              style={{ background: '#faf7f2', border: '1px solid #c9b99a', color: '#2c1810' }}
+              placeholder={`מקור ${i + 1} — שם מחבר, שנה, ציטוט...`}
+            />
+            <div className="text-left text-xs mt-0.5" style={{ color: src.length > 1300 ? '#c0392b' : '#8a6a50' }}>
+              {src.length}/1500
+            </div>
+          </div>
           {sources.length > 1 && (
             <button
               type="button"

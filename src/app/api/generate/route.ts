@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@clerk/nextjs/server'
+import { auth, currentUser } from '@clerk/nextjs/server'
 import type { FormData } from '@/lib/types'
 import { buildNewsPrompt, buildSecondaryPrompt, buildEditorialPrompt } from '@/lib/prompts'
+import { redis } from '@/lib/redis'
+
+const MAX_ARTICLES = 5
+const ADMIN_EMAIL = 'yaacovbod@gmail.com'
 
 export async function POST(request: NextRequest) {
   const apiKey = process.env.GEMINI_API_KEY
@@ -11,6 +15,20 @@ export async function POST(request: NextRequest) {
 
   const { userId } = await auth()
   if (!userId) return NextResponse.json({ error: 'לא מחובר' }, { status: 401 })
+
+  const clerkUser = await currentUser()
+  const isAdmin = clerkUser?.emailAddresses.some(e => e.emailAddress === ADMIN_EMAIL)
+
+  if (!isAdmin) {
+    const countRaw = await redis.get(`articles_count:${userId}`)
+    const count = countRaw ? parseInt(String(countRaw), 10) : 0
+    if (count >= MAX_ARTICLES) {
+      return NextResponse.json(
+        { error: 'הגעת למכסת הכתבות המקסימלית (5 כתבות). פנה למורה.' },
+        { status: 403 }
+      )
+    }
+  }
 
   let body: FormData
   try {
@@ -73,6 +91,10 @@ export async function POST(request: NextRequest) {
   const result = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text
   if (!result) {
     return NextResponse.json({ error: 'לא התקבל תוכן מ-Gemini' }, { status: 502 })
+  }
+
+  if (!isAdmin) {
+    await redis.incr(`articles_count:${userId}`)
   }
 
   return NextResponse.json({ result })

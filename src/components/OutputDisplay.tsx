@@ -109,15 +109,21 @@ export default function OutputDisplay({ text, onReset, onRefine, onSave, refinin
           רוצה לשפר את הכתבה?
         </p>
         <div className="flex gap-2">
-          <textarea
-            value={refinementNote}
-            onChange={e => setRefinementNote(e.target.value)}
-            rows={2}
-            disabled={refining}
-            className="flex-1 px-3 py-2 rounded-xl text-sm resize-none"
-            style={{ background: '#FDF7E4', border: '1px solid #D4A843', color: '#2C1A00' }}
-            placeholder='למשל: "קצר את הכתבה", "הוסף ציטוט מהמקור הראשון", "שנה את הטון לרשמי יותר"...'
-          />
+          <div className="flex-1">
+            <textarea
+              value={refinementNote}
+              onChange={e => setRefinementNote(e.target.value)}
+              rows={2}
+              maxLength={300}
+              disabled={refining}
+              className="w-full px-3 py-2 rounded-xl text-sm resize-none"
+              style={{ background: '#FDF7E4', border: '1px solid #D4A843', color: '#2C1A00' }}
+              placeholder='למשל: "קצר את הכתבה", "הוסף ציטוט מהמקור הראשון", "שנה את הטון לרשמי יותר"...'
+            />
+            <div className="text-left text-xs mt-0.5" style={{ color: refinementNote.length > 250 ? '#c0392b' : '#8a6a50' }}>
+              {refinementNote.length}/300
+            </div>
+          </div>
           <button
             onClick={handleRefine}
             disabled={refining || !refinementNote.trim()}
