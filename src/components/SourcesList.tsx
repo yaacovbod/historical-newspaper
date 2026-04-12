@@ -7,7 +7,7 @@ interface Props {
   maxTotalChars?: number
 }
 
-export default function SourcesList({ sources, onChange, maxSources = 4, maxTotalChars = 5000 }: Props) {
+export default function SourcesList({ sources, onChange, maxSources = 4, maxTotalChars = 20000 }: Props) {
   const totalChars = sources.reduce((sum, s) => sum + s.length, 0)
   const remaining = maxTotalChars - totalChars
 
