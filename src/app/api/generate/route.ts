@@ -59,24 +59,40 @@ export async function POST(request: NextRequest) {
     contents: [{ role: 'user', parts: [{ text: user }] }],
   }
 
-  let geminiResponse: Response
-  try {
-    geminiResponse = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(geminiPayload),
+  const MAX_RETRIES = 3
+  const RETRY_DELAY_MS = 2000
+
+  let geminiResponse: Response | null = null
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      geminiResponse = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${apiKey}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(geminiPayload),
+        }
+      )
+    } catch {
+      if (attempt === MAX_RETRIES) {
+        return NextResponse.json({ error: 'שגיאת רשת בפנייה ל-Gemini' }, { status: 502 })
       }
-    )
-  } catch {
-    return NextResponse.json({ error: 'שגיאת רשת בפנייה ל-Gemini' }, { status: 502 })
+      await new Promise(r => setTimeout(r, RETRY_DELAY_MS * attempt))
+      continue
+    }
+
+    if (geminiResponse.status === 503 && attempt < MAX_RETRIES) {
+      await new Promise(r => setTimeout(r, RETRY_DELAY_MS * attempt))
+      continue
+    }
+
+    break
   }
 
-  if (!geminiResponse.ok) {
-    const errorText = await geminiResponse.text().catch(() => '')
+  if (!geminiResponse!.ok) {
+    const errorText = await geminiResponse!.text().catch(() => '')
     return NextResponse.json(
-      { error: `Gemini החזיר שגיאה ${geminiResponse.status}: ${errorText}` },
+      { error: `Gemini החזיר שגיאה ${geminiResponse!.status}: ${errorText}` },
       { status: 502 }
     )
   }
